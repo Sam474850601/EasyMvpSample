@@ -4,9 +4,9 @@
 
 举个例子：
 需求：
-  欢迎界面
-  显示 you're welcome to easymvp
-  点击加载弹窗，3秒进入登陆界面
+  欢迎界面</bar>
+  显示 you're welcome to easymvp</bar>
+  点击加载弹窗，3秒进入登陆界面</bar>
  
  
  
