@@ -135,6 +135,14 @@ public final  class EasyHelper {
                 injectObject(needContextInstance,classType, field,  appContext, containerObject);
                 addObject(object);
             }
+            else
+            {
+                try {
+                    ClassUtil.setValueForField(containerObject, field, object);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         if(null == object)
         {

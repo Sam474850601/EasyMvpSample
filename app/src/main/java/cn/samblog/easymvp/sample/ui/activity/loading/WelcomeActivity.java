@@ -3,20 +3,18 @@ package cn.samblog.easymvp.sample.ui.activity.loading;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import cn.samblog.easymvp.sample.R;
 import cn.samblog.easymvp.sample.presenter.loading.IWelcomePresenter;
 import cn.samblog.easymvp.sample.presenter.loading.WelcomePresenter;
-import cn.samblog.easymvp.sample.ui.MainActivity;
-import cn.samblog.easymvp.sample.ui.view.IWelcomeView;
+import cn.samblog.easymvp.sample.ui.activity.user.UserActivity;
+import cn.samblog.easymvp.sample.ui.view.loading.IWelcomeView;
 import cn.samblog.lib.easymvp.annotation.Find;
 import cn.samblog.lib.easymvp.annotation.Inject;
 import cn.samblog.lib.easymvp.annotation.Presenter;
 import cn.samblog.lib.easymvp.annotation.Resource;
 import cn.samblog.lib.easymvp.ui.activity.BaseActivity;
-import cn.samblog.lib.easymvp.utils.EasyHelper;
 
 /**
  * 欢迎界面
@@ -59,7 +57,8 @@ public class WelcomeActivity extends BaseActivity  implements IWelcomeView {
     }
 
     @Override
-    public void forwordMainView() {
-        startActivityFromRightToLeft(MainActivity.class);
+    public void forwordUserView() {
+        startActivityFromRightToLeft(UserActivity.class);
+        finish();
     }
 }

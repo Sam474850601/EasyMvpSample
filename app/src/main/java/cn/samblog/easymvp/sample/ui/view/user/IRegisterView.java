@@ -1,4 +1,4 @@
-package cn.samblog.easymvp.sample.ui.view;
+package cn.samblog.easymvp.sample.ui.view.user;
 
 import cn.samblog.lib.easymvp.ui.view.IView;
 
@@ -7,4 +7,6 @@ import cn.samblog.lib.easymvp.ui.view.IView;
  */
 
 public interface IRegisterView  extends IView {
+    String getRegisterUsername();
+    void forwardMainView();
 }

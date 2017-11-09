@@ -1,4 +1,4 @@
-package cn.samblog.easymvp.sample.ui.view;
+package cn.samblog.easymvp.sample.ui.view.loading;
 
 import cn.samblog.lib.easymvp.ui.view.IView;
 
@@ -8,5 +8,5 @@ import cn.samblog.lib.easymvp.ui.view.IView;
 
 public interface IWelcomeView extends IView {
     void showLoadingView(boolean isShow);
-    void forwordMainView();
+    void forwordUserView();
 }

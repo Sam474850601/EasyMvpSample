@@ -17,9 +17,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.activity.index.MainActivity" />
 
-        </activity>
+        <activity android:name=".ui.activity.user.UserActivity" />
+
     </application>
 
 </manifest>

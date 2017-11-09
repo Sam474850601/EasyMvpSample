@@ -1,4 +1,4 @@
-package cn.samblog.easymvp.sample.model;
+package cn.samblog.easymvp.sample.model.user;
 
 /**
  * Created by Administrator on 2017/11/8.
