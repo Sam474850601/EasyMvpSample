@@ -20,7 +20,7 @@ public  abstract  class BasePresenter<T extends IView> implements IPresenter<T> 
 
     @Override
     public void onCreate(Context applicationContext) {
-        EasyHelper.inject(this, null, applicationContext);
+        EasyHelper.inject(this, null, applicationContext, null);
         contextWeakReference = new WeakReference<Context>(applicationContext);
     }
 
@@ -49,6 +49,7 @@ public  abstract  class BasePresenter<T extends IView> implements IPresenter<T> 
         contextWeakReference.clear();
         System.runFinalization();
         System.gc();
+        EasyHelper.release(this);
     }
 
     @Override

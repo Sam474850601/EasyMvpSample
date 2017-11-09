@@ -33,7 +33,7 @@ public abstract class BasePopupWindowBuilder {
     {
         this.context = context;
         windowView  = EasyHelper.getLayoutView(context, this);
-        EasyHelper.inject(this, windowView,context);
+        EasyHelper.inject(this, windowView,context, null);
         AutoUtils.auto(windowView);
         popupWindow = new PopupWindow(windowView,getWith(),  getHeight());
         popupWindow.setFocusable(true);

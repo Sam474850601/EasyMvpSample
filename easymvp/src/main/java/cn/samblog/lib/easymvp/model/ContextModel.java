@@ -15,7 +15,7 @@ public abstract class ContextModel {
     private  final   void _onCreate(Context context)
     {
         weakReference = new WeakReference<Context>(context);
-        EasyHelper.inject(this, null, context);
+        EasyHelper.inject(this, null, context, null);
         onCreate(getContext());
     }
 

@@ -16,4 +16,5 @@ public @interface Resource {
      * 布局资源
      */
     int layoutResource();
+
 }

@@ -5,4 +5,7 @@ package cn.samblog.easymvp.sample.model;
  */
 
 public interface IUserModel {
+
+    void setUserName(String userName);
+    String getUserName();
 }

@@ -18,6 +18,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.zhy.autolayout.AutoLayoutActivity;
+
 import cn.samblog.lib.easymvp.annotation.Presenter;
 import cn.samblog.lib.easymvp.presenter.BasePresenter;
 import cn.samblog.lib.easymvp.presenter.IPresenter;
@@ -40,7 +42,7 @@ import java.util.Vector;
  * Activity快速开发基类
  * @author Sam
  */
-public abstract class BaseActivity<P extends BasePresenter>  extends AppCompatActivity implements  NotifyAllActivityBroadcastReciever.OnRecieveListener {
+public abstract class BaseActivity extends AppCompatActivity implements  NotifyAllActivityBroadcastReciever.OnRecieveListener {
     private SparseArray<View> views =new SparseArray<>();
     private ArrayList<IPresenter> presenters = new ArrayList<>();
     protected void setLayoutBefore() {
@@ -88,7 +90,7 @@ public abstract class BaseActivity<P extends BasePresenter>  extends AppCompatAc
 
     @Deprecated
     @Override
-    protected  void onCreate(@Nullable Bundle savedInstanceState) {
+    protected final  void onCreate(@Nullable Bundle savedInstanceState) {
         onCreateBefore();
         super.onCreate(savedInstanceState);
         mSvedInstanceState = savedInstanceState;
@@ -118,49 +120,45 @@ public abstract class BaseActivity<P extends BasePresenter>  extends AppCompatAc
     }
 
     private void _stopPresenters() {
-        Observable.from(presenters).subscribe(new Action1<IPresenter>() {
-            @Override
-            public void call(IPresenter presenter) {
-                presenter.onStop();
-            }
-        });
+
+        for(IPresenter presenter : presenters)
+        {
+            presenter.onStop();
+        }
     }
 
 
     private void _pausePresenters() {
-        Observable.from(presenters).subscribe(new Action1<IPresenter>() {
-            @Override
-            public void call(IPresenter presenter) {
-                presenter.onPause();
-            }
-        });
+        for(IPresenter presenter : presenters)
+        {
+            presenter.onPause();
+        }
+
     }
     private void _resumePresenters() {
-        Observable.from(presenters).subscribe(new Action1<IPresenter>() {
-            @Override
-            public void call(IPresenter presenter) {
-                presenter.onResume();
-            }
-        });
+        for(IPresenter presenter : presenters)
+        {
+            presenter.onResume();
+        }
+
     }
 
     private void _restartPresenters() {
-        Observable.from(presenters).subscribe(new Action1<IPresenter>() {
-            @Override
-            public void call(IPresenter presenter) {
-                presenter.onRestart();
-            }
-        });
+        for(IPresenter presenter : presenters)
+        {
+            presenter.onRestart();
+        }
+
     }
 
 
     private void _startPresenters() {
-        Observable.from(presenters).subscribe(new Action1<IPresenter>() {
-            @Override
-            public void call(IPresenter presenter) {
-                presenter.onStart();
-            }
-        });
+
+        for(IPresenter presenter : presenters)
+        {
+            presenter.onStart();
+        }
+
     }
 
 
@@ -192,17 +190,18 @@ public abstract class BaseActivity<P extends BasePresenter>  extends AppCompatAc
     protected void onDestroy() {
         notifyAllActivityBroadcastReciever.release(getApplicationContext());
         _destroyPresenters();
+        EasyHelper.release(this);
         super.onDestroy();
     }
 
 
     private void _destroyPresenters() {
-        Observable.from(presenters).subscribe(new Action1<IPresenter>() {
-            @Override
-            public void call(IPresenter presenter) {
-                presenter.onDestroy();
-            }
-        });
+
+        for(IPresenter presenter : presenters)
+        {
+            presenter.onDestroy();
+        }
+
     }
 
 
@@ -220,15 +219,25 @@ public abstract class BaseActivity<P extends BasePresenter>  extends AppCompatAc
             }
             transition.commitAllowingStateLoss();
         }
-        EasyHelper.inject(this,mParentView, this);
+        EasyHelper.inject(this,mParentView, this, presenters);
         injectLayoutAfter(mParentView);
-        mPresenter = ClassUtil.newSimpleInstance(ClassUtil.getSuperClassGenricType(getClass(), 0));
-        mPresenter.setIntent(getIntent());
-        mPresenter.onCreate(getApplicationContext());
-        mPresenter.setView((IView) this);
+
+
+        //创建presenter
+        for(IPresenter presenter : presenters)
+        {
+            presenter.setIntent(getIntent());
+            presenter.onCreate(getApplicationContext());
+            presenter.setView((IView) this);
+        }
 
         initViews(mSvedInstanceState,mParentView);
-        mPresenter.initPeresenter(mSvedInstanceState, mPresenter.getView());
+
+        //初始化presenter
+        for(IPresenter presenter : presenters)
+        {
+            presenter.initPeresenter(mSvedInstanceState, presenter.getView());
+        }
 
     }
 
@@ -242,10 +251,16 @@ public abstract class BaseActivity<P extends BasePresenter>  extends AppCompatAc
     }
 
 
-    public P getPresenter() {
-        return mPresenter;
+    public <T>  T getPresenter(Class<? extends IPresenter> presenterClass) {
+        for(IPresenter presenter : presenters)
+        {
+            if(presenter.getClass() == presenterClass )
+            {
+                 return (T) presenter;
+            }
+        }
+        return null;
     }
-
 
 
     public void startActivityFromLeftToRight(Intent intent)

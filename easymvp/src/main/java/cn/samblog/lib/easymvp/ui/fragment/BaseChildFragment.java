@@ -51,7 +51,7 @@ public abstract class BaseChildFragment<T extends BaseFragment>  extends Fragmen
         super.onViewCreated(view, savedInstanceState);
         if (null  != mParentView) {
 
-            EasyHelper.inject(this,mParentView, getContext());
+            EasyHelper.inject(this,mParentView, getContext(), null);
             initViews(savedInstanceState, mParentView);
         }
     }

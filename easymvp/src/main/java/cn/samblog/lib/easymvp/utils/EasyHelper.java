@@ -12,21 +12,19 @@ import cn.samblog.lib.easymvp.annotation.Model;
 import cn.samblog.lib.easymvp.annotation.OnClicked;
 import cn.samblog.lib.easymvp.annotation.Presenter;
 import cn.samblog.lib.easymvp.annotation.Resource;
-import cn.samblog.lib.easymvp.annotation.Single;
+import cn.samblog.lib.easymvp.annotation.SingleInstance;
 import cn.samblog.lib.easymvp.model.ContextModel;
 import cn.samblog.lib.easymvp.presenter.IPresenter;
+
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
+
 
 /**
  * 反射注解辅助工具
@@ -38,25 +36,34 @@ public final  class EasyHelper {
     private  final static  Manager manager = new Manager();
 
     /**
-     * 如果是单例，那么用包名做区分
-     * 如果不是， 那么用hashcode做区分
+     * 如果是单例，那么用包名做区
      */
     private  final static class Manager
     {
-        final Map<Object, IPresenter> presenters =new Hashtable<Object, IPresenter>();
 
-        final Map<Object, ContextModel> models =new Hashtable<Object, ContextModel>();
-
+        final Map<String, ContextModel> models =new Hashtable<String, ContextModel>();
+        final Map<String, Object> others =new Hashtable<String, Object>();
     }
 
-    public static <T>  T getSinglePresenter(Class<? extends T> classType  )
-    {
-        return (T)manager.presenters.get(classType.getName());
-    }
-
-    public <T>  T getSingleModel(Class<? extends T> classType  )
+    public static  <T>  T getSingleModel(Class<? extends T> classType  )
     {
         return (T)manager.models.get(getSingleKey(classType));
+    }
+
+    public static void addModel(ContextModel contextModel)
+    {
+        manager.models.put(getSingleKey(contextModel.getClass()), contextModel);
+    }
+
+
+    public static  <T>  T getSingleObject(Class<? extends T> classType  )
+    {
+        return (T)manager.others.get(getSingleKey(classType));
+    }
+
+    private static void addObject(Object object)
+    {
+        manager.others.put(getSingleKey(object.getClass()), object);
     }
 
 
@@ -70,25 +77,9 @@ public final  class EasyHelper {
         return object.getClass().getName()+":"+parentClass.getName();
     }
 
-    public  static   void addPresenter(IPresenter presenter , Class<?> parentClass)
-    {
-        manager.presenters.put(getKey(presenter, parentClass), presenter);
-    }
 
-    public  static   void addModel(ContextModel model , Class<?> parentClass)
-    {
-        manager.models.put(getKey(model, parentClass), model);
-    }
 
-    public static  void removeModel(ContextModel model , Class<?> parentClass)
-    {
-        manager.presenters.remove(getKey(model, parentClass));
-    }
 
-    public static  void removePresenter(ContextModel model , Class<?> parentClass)
-    {
-        manager.models.remove(getKey(model, parentClass));
-    }
 
 
     /**
@@ -103,11 +94,13 @@ public final  class EasyHelper {
             if(Resource.class.isAssignableFrom(anntation.annotationType()))
             {
                 Resource resource = (Resource) anntation;
-                return LayoutInflater.from(context).inflate(resource.layoutResource(), null);
+                int layout =  resource.layoutResource();
+                return LayoutInflater.from(context).inflate(layout, null);
             }
         }
         return null;
     }
+
 
 
     public static int getResource( Object containerObject)
@@ -133,12 +126,34 @@ public final  class EasyHelper {
         Inject fieldAnnotation = field.getAnnotation(Inject.class);
         Class<?> classType = fieldAnnotation.classType();
         boolean needContextInstance = fieldAnnotation.hasContextParamConstructor();
+        Object object  = null;
+        if(field.isAnnotationPresent(SingleInstance.class))
+        {
+            object = getSingleObject(classType);
+            if(null == object)
+            {
+                injectObject(needContextInstance,classType, field,  appContext, containerObject);
+                addObject(object);
+            }
+        }
+        if(null == object)
+        {
+            injectObject(needContextInstance,classType, field,  appContext, containerObject);
+        }
+    }
+
+    public static  Object injectObject( boolean needContextInstance,  Class<?> classType, Field field , Context appContext,Object containerObject )
+    {
+
         classType =  Object.class == classType ? field.getType() : classType;
+        Object object = null;
         try {
             if (needContextInstance) {
-                ClassUtil.setValueForField(containerObject, field, ClassUtil.newObjectByContructorWithParams(classType, new Class[]{Context.class}, new Object[]{appContext}));
+                object =  ClassUtil.newObjectByContructorWithParams(classType, new Class[]{Context.class}, new Object[]{appContext});
+                ClassUtil.setValueForField(containerObject, field, object);
             } else {
-                ClassUtil.setValueForField(containerObject, field, ClassUtil.newObjectByContructorWithoutParams(classType));
+                object = ClassUtil.newObjectByContructorWithoutParams(classType);
+                ClassUtil.setValueForField(containerObject, field,object );
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -149,7 +164,9 @@ public final  class EasyHelper {
         } catch (InstantiationException e) {
             e.printStackTrace();
         }
+        return object;
     }
+
 
 
     /**
@@ -179,11 +196,13 @@ public final  class EasyHelper {
     /**
      * 注入对应实例
      */
-    public static void inject( Object containerObject,  View parentView, Context context)
+    public static void inject( Object containerObject,  View parentView, Context context,List<IPresenter> presenters)
     {
+
         SparseArray<View> viewSparseArray = new  SparseArray<View>();
-        injectFields(containerObject,parentView, context, viewSparseArray);
+        injectFields(containerObject,parentView, context, viewSparseArray,presenters);
         injectMethods(containerObject,  parentView, viewSparseArray);
+
     }
 
 
@@ -191,7 +210,8 @@ public final  class EasyHelper {
 
 
     private static void injectMethods(final Object containerObject, View parentView, SparseArray<View> viewSparseArray) {
-
+        if(null == parentView)
+            return;
         Method[] methods = containerObject.getClass().getDeclaredMethods();
         if (null != methods && methods.length > 0) {
             for (final Method method : methods) {
@@ -232,7 +252,10 @@ public final  class EasyHelper {
             {
                 if(field.isAnnotationPresent(Find.class))
                 {
-                    EasyHelper.injectViews(containerObject, field, parentView, viewSparseArray);
+                    if(null != parentView)
+                    {
+                        EasyHelper.injectViews(containerObject, field, parentView, viewSparseArray);
+                    }
                 }
                 else if(field.isAnnotationPresent(Inject.class))
                 {
@@ -244,25 +267,43 @@ public final  class EasyHelper {
                 }
                 else if(field.isAnnotationPresent(Presenter.class))
                 {
-                    EasyHelper.injectPresenter(containerObject, field, context);
+                    if(null != presenters)
+                    {
+                        IPresenter presenter =  EasyHelper.injectPresenter(containerObject, field);
+                        if(null != presenter)
+                        {
+                            presenters.add(presenter);
+                        }
+                    }
+
                 }
 
             }
         }
 
-
     }
 
-    public static IPresenter injectPresenter(Object containerObject, Field field, Context applicationContext)
+    public static IPresenter injectPresenter(Object containerObject, Field field)
     {
-        Presenter modelAnn = field.getAnnotation(Presenter.class);
+        Presenter presenterAnn = field.getAnnotation(Presenter.class);
+        Class<? extends IPresenter> modelClass =  presenterAnn.value();
+        IPresenter presenter = null;
+        try {
+            presenter  = (IPresenter) ClassUtil.newObjectByContructorWithoutParams(modelClass);
+            ClassUtil.setValueForField(containerObject, field, presenter);
 
-        if(field.isAnnotationPresent(Single.class))
-        {
-            EasyHelper.getSinglePresenter();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        return
+        return   presenter;
     }
 
 
@@ -279,9 +320,38 @@ public final  class EasyHelper {
     public static void injectModel(Object containerObject, Field field, Context applicationContext )
     {
         Model modelAnn = field.getAnnotation(Model.class);
-        Class<? extends ContextModel> modelClass =  modelAnn.classType();
+        ContextModel contextModel   = null;
+        Class<? extends ContextModel> modelClass =  modelAnn.value();
+        if(field.isAnnotationPresent(SingleInstance.class))
+        {
+            contextModel =  EasyHelper.getSingleModel(modelClass);
+            if(null == contextModel)
+            {
+                contextModel =  injectModel(modelClass,field, applicationContext,   containerObject);
+                EasyHelper.addModel(contextModel);
+            }
+            else
+            {
+                try {
+                    ClassUtil.setValueForField(containerObject, field, contextModel);
+                    ClassUtil.invokeMethod(contextModel,"_onCreate" , new Class[]{Context.class}, new Object[]{applicationContext});
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if(null == contextModel)
+        {
+            injectModel(modelClass,field, applicationContext,   containerObject);
+        }
+
+    }
+
+    private static  ContextModel injectModel( Class<? extends ContextModel> modelClass , Field field, Context applicationContext , Object containerObject)
+    {
+        ContextModel contextModel   = null;
         try {
-            ContextModel contextModel =  (ContextModel)ClassUtil.newObjectByContructorWithoutParams(modelClass);
+            contextModel   =  (ContextModel)ClassUtil.newObjectByContructorWithoutParams(modelClass);
             ClassUtil.setValueForField(containerObject, field, contextModel);
             ClassUtil.invokeMethod(contextModel,"_onCreate" , new Class[]{Context.class}, new Object[]{applicationContext});
         } catch (IllegalAccessException e) {
@@ -295,6 +365,7 @@ public final  class EasyHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return contextModel;
     }
 
     /**
@@ -318,6 +389,13 @@ public final  class EasyHelper {
 
     public static  void showView(View...views) {
         setVisible(View.VISIBLE, views);
+    }
+
+    public static  void showView(boolean isShow, View...views) {
+        if(isShow)
+            EasyHelper.showView(views);
+        else
+            EasyHelper.hideView(views);
     }
 
 
@@ -397,6 +475,24 @@ public final  class EasyHelper {
             }
         }
         return instance;
+    }
+
+    public static void  release(final Object container)
+    {
+        final Field[] fields  = container.getClass().getDeclaredFields();
+        for(Field field : fields)
+        {
+           if( (field.isAnnotationPresent(Model.class) || field.isAnnotationPresent(Inject.class))&&(field.isAnnotationPresent(SingleInstance.class)))
+           {
+               field.setAccessible(true);
+               try {
+                   field.set(container, null);
+               } catch (IllegalAccessException e) {
+                   e.printStackTrace();
+               }
+           }
+        }
+
     }
 
 

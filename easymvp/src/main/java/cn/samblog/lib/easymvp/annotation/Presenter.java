@@ -17,5 +17,5 @@ import cn.samblog.lib.easymvp.ui.view.IView;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Presenter {
-    Class<? extends IPresenter> classType();
+    Class<? extends IPresenter> value();
 }

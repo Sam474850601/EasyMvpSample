@@ -14,5 +14,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Model {
-    Class<? extends ContextModel> classType();
+    Class<? extends ContextModel> value();
 }
