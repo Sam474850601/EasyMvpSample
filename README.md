@@ -38,6 +38,9 @@
 
 
 #### 第一步 添加 activity_welcome.xml
+
+说明: 主题是沉淀式，需要加上 android:fitsSystemWindows="true"， 如果不想要这个效果，重写 BaseActivity的 setLayoutBefore,将其覆盖即可
+
 ```xml
 <RelativeLayout
 android:layout_width="match_parent"
@@ -429,4 +432,3 @@ public class WelcomeActivity extends BaseActivity  implements IWelcomeView {
 
 
 ![运行结果](https://github.com/Sam474850601/EasyMvpSample/blob/master/part2.png)
-
