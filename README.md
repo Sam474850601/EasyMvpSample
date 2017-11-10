@@ -11,16 +11,18 @@
 4.对于Activity,内部提供Find注入View，onCliked注解点击事件。内部还有封装好的RecyclerView的万能适配器等。
 
 
-##举个例子：
-###需求：
+## 举个例子：
+### 需求：
 #####  欢迎界面 
 ##### 1.提供TextView, 显示 you're welcome to easymvp，要求初始化的时候动态设置
 ##### 3.提供“进入体验按钮”，点击“进入体验按钮”， 弹窗ProgressDialog，3秒进入登陆界面
-####  相关： 
+#####  相关： 
+```java
+     
       Model: LoadingModel
       UI: IWelcomeView ,  WelcomeActivity , activity_welcome.xml
       Presenter:   WelcomePresenter 
-      
+```
 ##### 
  
 ## 界面:
