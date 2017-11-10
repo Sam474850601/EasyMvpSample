@@ -91,6 +91,7 @@ public class WelcomeActivity extends BaseActivity
 
 ```
 运行结果：
+
 ![运行结果](https://github.com/Sam474850601/EasyMvpSample/blob/master/run1.png)
 
 #### 第三步 添加IWelcomeView.java，目的给presenter层调用
@@ -190,6 +191,7 @@ public class WelcomeActivity extends BaseActivity  implements IWelcomeView {
 
 ```
 运行结果
+
 ![运行结果](https://github.com/Sam474850601/EasyMvpSample/blob/master/part1.png)
 
 
@@ -257,7 +259,7 @@ public class LoadingModel extends ContextModel implements ILoadingModel {
 ```
 
  
-#### 第五步 添加 IWelcomePresenter.java, 添加 void startReading()加载方法，目的让WelcomeActivity调用
+#### 第六步 添加 IWelcomePresenter.java, 添加 void startReading()加载方法，目的让WelcomeActivity调用
 ```java
 
 public interface IWelcomePresenter {
@@ -269,11 +271,24 @@ public interface IWelcomePresenter {
 
 
 ```
-#### 第5步 添加WelcomePresenter.java ，实现添加IWelcomePresenter
+#### 第七步 添加 WelcomePresenter.java ，实现添加IWelcomePresenter ， 并且重写 initPeresenter方法 （下面会给出解析为什么要实现这个方法）
+
+使用@Model注入ILoadingModel 引用
 
 
+```java
 
+{
+    //..
+    @Model(LoadingModel.class)
+    ILoadingModel loadingModel;
+    //..
+    
+}
 
+```
+
+完整代码
 ```java
 
 /**
@@ -289,7 +304,7 @@ public class WelcomePresenter extends BasePresenter<IWelcomeView> implements IWe
 
     @Override
     public void initPeresenter(Bundle savedInstanceState, IWelcomeView view) {
-        Log.e("MainPresenter", "initPeresenter");
+        Log.e("WelcomePresenter", "initPeresenter");
 
     }
 
@@ -318,5 +333,100 @@ public class WelcomePresenter extends BasePresenter<IWelcomeView> implements IWe
 
 ```
 
+#### 最后一步 为 WelcomeActivity 引入 IWelcomePresenter 实例
 
+使用@Presenter注入WelcomePresenter实例
+
+```java
+{
+    
+    //..
+    
+    @Presenter(WelcomePresenter.class)
+    IWelcomePresenter welcomePresenter;
+    
+    //...
+    
+}
+
+```
+
+实现点击时候加载功能
+
+```java
+
+{
+    
+    //..
+       
+    @OnClicked(R.id.btn_onStartCliked)
+    void onStartCliked(View view)
+    {
+        welcomePresenter.startReading();
+    }
+   //..
+
+}
+
+```
+
+完整代码
+
+```java
+
+/**
+ * 欢迎界面
+ */
+@Resource(layoutResource = R.layout.acitivity_welcome)
+public class WelcomeActivity extends BaseActivity  implements IWelcomeView {
+
+    @Presenter(WelcomePresenter.class)
+    IWelcomePresenter welcomePresenter;
+
+    @Find(R.id.tv_title)
+    TextView tvTitle;
+
+    @Inject(hasContextParamConstructor = true)
+    ProgressDialog progressDialog;
+
+    @Override
+    protected void initViews(Bundle savedInstanceState, View parentView) {
+        progressDialog.setMessage("正在加载中...");
+        tvTitle.setText("you're welcome to use easymvp");
+    }
+
+    @OnClicked(R.id.btn_onStartCliked)
+    void onStartCliked(View view)
+    {
+        welcomePresenter.startReading();
+    }
+
+
+    @Override
+    public void showLoadingView(boolean isShow) {
+        if(isShow)
+        {
+            progressDialog.show();
+        }
+        else
+        {
+            progressDialog.dismiss();
+        }
+
+    }
+
+    @Override
+    public void forwordUserView() {
+        startActivityFromRightToLeft(UserActivity.class);
+        finish();
+    }
+}
+
+
+```
+
+点击运行结果
+
+
+![运行结果](https://github.com/Sam474850601/EasyMvpSample/blob/master/part2.png)
 
