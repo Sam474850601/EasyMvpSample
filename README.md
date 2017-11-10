@@ -17,12 +17,9 @@
 ##### 1.提供TextView, 显示 you're welcome to easymvp，要求初始化的时候动态设置
 ##### 3.提供“进入体验按钮”，点击“进入体验按钮”， 弹窗ProgressDialog，3秒进入登陆界面
 #####  相关： 
-```java
-     
-      Model: LoadingModel
-      UI: IWelcomeView ,  WelcomeActivity , activity_welcome.xml
-      Presenter:   WelcomePresenter 
-```
+      Model: ILoadingModel.java , LoadingModel.java
+      UI: IWelcomeView.java ,  WelcomeActivity.java , activity_welcome.xml
+      Presenter:   IWelcomePresenter.java , WelcomePresenter.java 
 ##### 
  
 ## 界面:
@@ -38,4 +35,21 @@
 
 
  
- 
+# 第一步创建Model 
+
+#### 添加接口ILoadingModel.java,提供加载方法  void loading(ILoadingCallback callback);
+```java
+public interface ILoadingModel 
+{
+    
+    void loading(ILoadingCallback callback);
+        
+}
+
+```    
+LoadingModel.java 继承ContextModel 
+```java
+    
+    
+
+```
