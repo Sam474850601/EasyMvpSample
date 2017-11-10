@@ -313,10 +313,15 @@ public class WelcomePresenter extends BasePresenter<IWelcomeView> implements IWe
 
     @Override
     public void startReading() {
+        //获取欢迎页面视图实例
         IWelcomeView view = getView();
+        //如果没有退出界面
         if(null != view)
         {
+            //显示加载对话
             view.showLoadingView(true);
+            
+            //模拟加载后跳转到用户页面
             loadingModel.loading(new ILoadingCallback() {
                 @Override
                 public void onCompleted() {
@@ -420,8 +425,9 @@ public class WelcomeActivity extends BaseActivity  implements IWelcomeView {
 
     @Override
     public void forwordUserView() {
-        startActivityFromRightToLeft(UserActivity.class);
-        finish();
+        //伪代码
+        //startActivityFromRightToLeft(UserActivity.class);
+        //finish();
     }
 }
 
