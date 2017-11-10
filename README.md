@@ -1,6 +1,6 @@
-# EasyMvp 
+# 欢迎使用EasyMvp
 
-这是个简单易用的mvp框架。通过注入式来将各层进行分离，层次清晰，易维护.
+这是个简单易用的mvp框架。通过注入式来将各层进行分离，层次清晰，易维护.(kotlin项目兼容)
 
 1.提供Model层, View层，Presenter层注解。
 
@@ -17,7 +17,7 @@
 ##### 1.提供TextView, 显示 you're welcome to easymvp，要求初始化的时候动态设置
 ##### 3.提供“进入体验按钮”，点击“进入体验按钮”， 弹窗ProgressDialog，3秒进入登陆界面
 #####  相关： 
-      Model: ILoadingModel.java , LoadingModel.java
+      Model: ILoadingModel.java , LoadingModel.java， ILoadingCallback.java（回调）
       UI: IWelcomeView.java ,  WelcomeActivity.java , activity_welcome.xml
       Presenter:   IWelcomePresenter.java , WelcomePresenter.java 
 ##### 
@@ -34,22 +34,289 @@
 ![进入界面](https://github.com/Sam474850601/EasyMvpSample/blob/master/part2.png)
 
 
- 
-# 第一步创建Model 
 
-#### 添加接口ILoadingModel.java,提供加载方法  void loading(ILoadingCallback callback);
+
+
+#### 第一步 添加 activity_welcome.xml
+```xml
+<RelativeLayout
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text=""
+    android:id="@+id/tv_title"
+    android:layout_centerInParent="true"
+    android:textSize="30dp"
+    />
+
+
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="进入体验"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="100dp"
+    android:textSize="30dp"
+    android:id="@+id/btn_onStartCliked"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    />
+
+
+</RelativeLayout>
+
+```
+
+#### 第二步 添加 WelcomeActivity 继承 BaseActivity,使用@Resource注解注入activity_welcome.xml视图，并重写initViews方法（下面会解析这个方法作用）
+
+```java
+
+@Resource(layoutResource = R.layout.acitivity_welcome)
+public class WelcomeActivity extends BaseActivity 
+{
+     @Override
+    protected void initViews(Bundle savedInstanceState, View parentView) 
+    {
+    
+    }
+    
+}
+
+```
+运行结果：
+![运行结果](https://github.com/Sam474850601/EasyMvpSample/blob/master/run1.png)
+
+#### 第三步 添加IWelcomeView.java，目的给presenter层调用
+```java
+public interface IWelcomeView extends IView {
+    //设置显示或隐藏ProgressDialog
+    void showLoadingView(boolean isShow);
+    //跳转到用户登录界面
+    void forwordUserView();
+}
+
+```
+
+
+#### 第四步 让WelcomeActivity实现IWelcomeView接口
+
+用@Find注入加载视图对象引用
+```java
+{
+    //...
+            @Find(R.id.tv_title)
+            TextView tvTitle;
+    //...
+}
+
+```
+使用@Inject加载带Context构造方法的对象
+```java
+
+{
+    //...
+            @Inject(hasContextParamConstructor = true)
+            ProgressDialog progressDialog;
+    //...
+}
+```
+
+
+使用@OnClicked添加点击事件
+```java
+
+{
+    //...
+    @OnClicked(R.id.btn_onStartCliked)
+    void onStartCliked(View view)
+    {
+       
+    }
+
+    //...
+}
+```
+
+#### 完整代码
+```java
+@Resource(layoutResource = R.layout.acitivity_welcome)
+public class WelcomeActivity extends BaseActivity  implements IWelcomeView {
+
+
+    @Find(R.id.tv_title)
+    TextView tvTitle;
+
+    @Inject(hasContextParamConstructor = true)
+    ProgressDialog progressDialog;
+
+    @Override
+    protected void initViews(Bundle savedInstanceState, View parentView) {
+        progressDialog.setMessage("正在加载中...");
+        tvTitle.setText("you're welcome to use easymvp");
+    }
+
+    @OnClicked(R.id.btn_onStartCliked)
+    void onStartCliked(View view)
+    {
+        
+    }
+
+
+    @Override
+    public void showLoadingView(boolean isShow) {
+        if(isShow)
+        {
+            progressDialog.show();
+        }
+        else
+        {
+            progressDialog.dismiss();
+        }
+
+    }
+
+    @Override
+    public void forwordUserView() {
+        //前往用户登录
+    }
+}
+
+```
+运行结果
+![运行结果](https://github.com/Sam474850601/EasyMvpSample/blob/master/part1.png)
+
+
+
+
+#### 第五步，添加加载完毕回调
+
+```java
+public interface ILoadingCallback
+{
+    //通知加载完毕
+    void onCompleted();
+}
+
+```
+
+
+#### 添加接口 ILoadingModel.java,提供加载方法 
 ```java
 public interface ILoadingModel 
 {
-    
+    //模拟加载耗时事务，回调
     void loading(ILoadingCallback callback);
         
 }
 
 ```    
-LoadingModel.java 继承ContextModel 
+#### 添加LoadingModel.java 继承ContextModel,实现 ILoadingModel
+
+使用@Inject注解注入任意无参数或只含Context构造方法的对象引用
+
 ```java
+
+
+   {
+       //...
+         @Inject
+         Handler handler;
+       //...
+       
+   }
+
+``` 
+
+完整代码
+
+```java
+
+public class LoadingModel extends ContextModel implements ILoadingModel {
+
+    @Inject
+    Handler handler;
+
+    @Override
+    public void loading(final ILoadingCallback callback) {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                callback.onCompleted();
+            }
+        }, 3000);
+    }
+}
     
-    
+```
+
+ 
+#### 第五步 添加 IWelcomePresenter.java, 添加 void startReading()加载方法，目的让WelcomeActivity调用
+```java
+
+public interface IWelcomePresenter {
+
+    //加载并跳转
+    void startReading();
+
+}
+
 
 ```
+#### 第5步 添加WelcomePresenter.java ，实现添加IWelcomePresenter
+
+
+
+
+```java
+
+/**
+ * 欢迎界面
+ */
+public class WelcomePresenter extends BasePresenter<IWelcomeView> implements IWelcomePresenter {
+
+
+    @Model(LoadingModel.class)
+    ILoadingModel loadingModel;
+
+
+
+    @Override
+    public void initPeresenter(Bundle savedInstanceState, IWelcomeView view) {
+        Log.e("MainPresenter", "initPeresenter");
+
+    }
+
+    @Override
+    public void startReading() {
+        IWelcomeView view = getView();
+        if(null != view)
+        {
+            view.showLoadingView(true);
+            loadingModel.loading(new ILoadingCallback() {
+                @Override
+                public void onCompleted() {
+                    IWelcomeView view = getView();
+                    if(null != view)
+                    {
+                        view.showLoadingView(false);
+                        view.forwordUserView();
+                    }
+                }
+            });
+        }
+    }
+
+
+}
+
+```
+
+
+
