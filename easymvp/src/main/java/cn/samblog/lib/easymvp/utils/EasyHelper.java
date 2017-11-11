@@ -397,12 +397,11 @@ public final  class EasyHelper {
     /**
      * 注入对应实例
      */
-    public static void inject( Object containerObject,  View parentView, Context appContext,Bundle savedInstanceState, OnInitViewsCallback callback)
+    public static List<IPresenter> inject( Object containerObject,  View parentView, Context appContext,Bundle savedInstanceState, OnInitViewsCallback callback)
     {
         SparseArray<View> viewSparseArray = new  SparseArray<View>();
 
         List<IPresenter> presenters = getPresentersByActivityContainer(containerObject);
-
 
         injectFields(containerObject,parentView, appContext, viewSparseArray, presenters);
 
@@ -437,6 +436,8 @@ public final  class EasyHelper {
         }
 
         injectMethods(containerObject,  parentView, viewSparseArray);
+
+        return presenters;
 
     }
 

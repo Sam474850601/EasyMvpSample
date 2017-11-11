@@ -43,7 +43,7 @@ import java.util.Vector;
  * @author Sam
  */
 public abstract class BaseActivity extends AppCompatActivity implements  NotifyAllActivityBroadcastReciever.OnRecieveListener {
-
+    private List<IPresenter> presenters;
     protected void setLayoutBefore() {
         addWindowTranslucentStatus();
     }
@@ -117,6 +117,7 @@ public abstract class BaseActivity extends AppCompatActivity implements  NotifyA
     protected void onDestroy() {
         notifyAllActivityBroadcastReciever.release(getApplicationContext());
         EasyHelper.release(this);
+        presenters = null;
         super.onDestroy();
     }
 
@@ -127,7 +128,7 @@ public abstract class BaseActivity extends AppCompatActivity implements  NotifyA
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        EasyHelper.inject(this, mParentView, getApplicationContext(), mSvedInstanceState, new EasyHelper.OnInitViewsCallback() {
+        presenters =   EasyHelper.inject(this, mParentView, getApplicationContext(), mSvedInstanceState, new EasyHelper.OnInitViewsCallback() {
             @Override
             public void onInit(View parentView) {
                 initViews(mSvedInstanceState,mParentView);
@@ -145,7 +146,20 @@ public abstract class BaseActivity extends AppCompatActivity implements  NotifyA
         super.startActivity(intent);
     }
 
-
+    public  IPresenter  getPresenter(Class<? extends  IPresenter> classType)
+    {
+        if(null != presenters)
+        {
+            for(IPresenter presenter : presenters)
+            {
+                if(presenter.getClass() == classType)
+                {
+                    return presenter;
+                }
+            }
+        }
+        return null;
+    }
 
 
     public void startActivityFromLeftToRight(Intent intent)

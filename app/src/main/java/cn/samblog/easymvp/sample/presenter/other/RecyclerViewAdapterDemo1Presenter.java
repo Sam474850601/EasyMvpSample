@@ -1,15 +1,12 @@
-package cn.samblog.easymvp.sample.presenter.util;
+package cn.samblog.easymvp.sample.presenter.other;
 
 import android.os.Bundle;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.samblog.easymvp.sample.ui.view.util.IRecyclerViewAdapterDemo1view;
-import cn.samblog.lib.easymvp.adapter.BaseRecyclerViewAdapter;
-import cn.samblog.lib.easymvp.adapter.IHolder;
+import cn.samblog.easymvp.sample.ui.view.other.IRecyclerViewAdapterDemo1view;
 import cn.samblog.lib.easymvp.bean.ContentItem;
-import cn.samblog.lib.easymvp.bean.Item;
 import cn.samblog.lib.easymvp.presenter.BasePresenter;
 
 /**

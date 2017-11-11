@@ -27,6 +27,12 @@ public abstract class BaseChildFragment<T extends BaseFragment>  extends Fragmen
 
     protected abstract void initViews(Bundle savedInstanceState, View parentView);
 
+    protected void onPrepare(View view)
+    {
+
+    }
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +46,7 @@ public abstract class BaseChildFragment<T extends BaseFragment>  extends Fragmen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (null == mParentView) {
             mParentView = inflater.inflate( EasyHelper.getResource(this),container , false);
-            AutoUtils.auto(mParentView);
+            onPrepare(mParentView);
         }
         return mParentView;
     }

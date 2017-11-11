@@ -10,6 +10,7 @@ import cn.samblog.easymvp.sample.presenter.custom.CustomPresenter;
 import cn.samblog.easymvp.sample.presenter.custom.ICustomPresenter;
 import cn.samblog.lib.easymvp.annotation.Presenter;
 import cn.samblog.lib.easymvp.annotation.Resource;
+import cn.samblog.lib.easymvp.presenter.IPresenter;
 import cn.samblog.lib.easymvp.ui.view.IView;
 import cn.samblog.lib.easymvp.utils.EasyHelper;
 

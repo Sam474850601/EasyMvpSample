@@ -1,4 +1,4 @@
-package cn.samblog.easymvp.sample.ui.view.util;
+package cn.samblog.easymvp.sample.ui.view.other;
 
 import java.util.List;
 

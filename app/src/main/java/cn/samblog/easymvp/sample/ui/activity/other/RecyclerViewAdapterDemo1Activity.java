@@ -1,6 +1,5 @@
-package cn.samblog.easymvp.sample.ui.activity.util;
+package cn.samblog.easymvp.sample.ui.activity.other;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,17 +7,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.zhy.autolayout.utils.AutoUtils;
-
 import java.util.List;
 
 import cn.samblog.easymvp.sample.R;
-import cn.samblog.easymvp.sample.presenter.util.IRecyclerViewAdapterDemo1Presenter;
-import cn.samblog.easymvp.sample.presenter.util.RecyclerViewAdapterDemo1Presenter;
-import cn.samblog.easymvp.sample.ui.view.util.IRecyclerViewAdapterDemo1view;
+import cn.samblog.easymvp.sample.presenter.other.IRecyclerViewAdapterDemo1Presenter;
+import cn.samblog.easymvp.sample.presenter.other.RecyclerViewAdapterDemo1Presenter;
+import cn.samblog.easymvp.sample.ui.view.other.IRecyclerViewAdapterDemo1view;
 import cn.samblog.lib.easymvp.adapter.BaseRecyclerViewAdapter;
 import cn.samblog.lib.easymvp.adapter.IHolder;
-import cn.samblog.lib.easymvp.adapter.Null;
 import cn.samblog.lib.easymvp.annotation.Find;
 import cn.samblog.lib.easymvp.annotation.Inject;
 import cn.samblog.lib.easymvp.annotation.OnClicked;
@@ -27,7 +23,6 @@ import cn.samblog.lib.easymvp.annotation.Resource;
 import cn.samblog.lib.easymvp.bean.ContentItem;
 import cn.samblog.lib.easymvp.bean.Item;
 import cn.samblog.lib.easymvp.ui.activity.BaseActivity;
-import cn.samblog.lib.easymvp.utils.ToastManager;
 
 /**
  * 一个Item布局的RecyclerView

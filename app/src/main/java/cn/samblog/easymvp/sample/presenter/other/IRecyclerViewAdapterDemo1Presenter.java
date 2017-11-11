@@ -1,4 +1,4 @@
-package cn.samblog.easymvp.sample.presenter.util;
+package cn.samblog.easymvp.sample.presenter.other;
 
 /**
  * @author Sam
