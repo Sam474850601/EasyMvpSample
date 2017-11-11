@@ -1,11 +1,17 @@
 package cn.samblog.easymvp.sample.bean;
 
-/**
- * Created by Administrator on 2017/11/9.
- */
+import cn.samblog.lib.easymvp.annotation.CacheField;
+
 
 public class User {
+    @CacheField
     public String username = "unknown";
+
+    @CacheField
+    public  int age = 0;
+
+    @CacheField
+    public  int id = 0;
 
     public String getUsername() {
         return username;
