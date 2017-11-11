@@ -7,8 +7,10 @@ import android.widget.TextView;
 import cn.samblog.easymvp.sample.R;
 import cn.samblog.easymvp.sample.presenter.index.IMainPresenter;
 import cn.samblog.easymvp.sample.presenter.index.MainPresenter;
+import cn.samblog.easymvp.sample.ui.activity.custom.CustomActivity;
 import cn.samblog.easymvp.sample.ui.view.index.IMainView;
 import cn.samblog.lib.easymvp.annotation.Find;
+import cn.samblog.lib.easymvp.annotation.OnClicked;
 import cn.samblog.lib.easymvp.annotation.Presenter;
 import cn.samblog.lib.easymvp.annotation.Resource;
 import cn.samblog.lib.easymvp.ui.activity.BaseActivity;
@@ -20,9 +22,14 @@ public class MainActivity extends BaseActivity implements IMainView {
     @Presenter(MainPresenter.class)
     IMainPresenter mainPresenter;
 
-
     @Find(R.id.tv_username)
     TextView tvUsername;
+
+    @OnClicked(R.id.btn_custom)
+    void forwardCustom(View view)
+    {
+        startActivityFromLeftToRight(CustomActivity.class);
+    }
 
     @Override
     protected void initViews(Bundle savedInstanceState, View parentView) {
@@ -33,4 +40,6 @@ public class MainActivity extends BaseActivity implements IMainView {
     public void initUsername(String username) {
         tvUsername.setText(username);
     }
+
+
 }

@@ -23,12 +23,12 @@ public class WelcomePresenter extends BasePresenter<IWelcomeView> implements IWe
     @Override
     public void onCreate(Context applicationContext) {
         super.onCreate(applicationContext);
-        Log.e("MainPresenter", "onCreate");
+        Log.e("WelcomePresenter", "onCreate");
     }
 
     @Override
     public void initPeresenter(Bundle savedInstanceState, IWelcomeView view) {
-        Log.e("MainPresenter", "initPeresenter");
+        Log.e("WelcomePresenter", "initPeresenter");
 
     }
 
@@ -55,31 +55,31 @@ public class WelcomePresenter extends BasePresenter<IWelcomeView> implements IWe
 
     @Override
     public void onStart() {
-        Log.e("MainPresenter", "onStart");
+        Log.e("WelcomePresenter", "onStart");
     }
 
 
     @Override
     public void onPause() {
-        Log.e("MainPresenter", "onPause");
+        Log.e("WelcomePresenter", "onPause");
     }
 
 
     @Override
     public void onStop() {
-        Log.e("MainPresenter", "onStop");
+        Log.e("WelcomePresenter", "onStop");
     }
 
     @Override
     public void onResume() {
-        Log.e("MainPresenter", "onResume");
+        Log.e("WelcomePresenter", "onResume");
     }
 
 
 
     @Override
     public void onDestroy() {
-        Log.e("MainPresenter", "onDestroy");
+        Log.e("WelcomePresenter", "onDestroy");
         super.onDestroy();
     }
 

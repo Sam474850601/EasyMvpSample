@@ -21,6 +21,8 @@
 
         <activity android:name=".ui.activity.user.UserActivity" />
 
+        <activity android:name=".ui.activity.custom.CustomActivity"/>
+
     </application>
 
 </manifest>
