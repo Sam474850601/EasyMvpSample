@@ -8,6 +8,7 @@ import cn.samblog.easymvp.sample.R;
 import cn.samblog.easymvp.sample.presenter.index.IMainPresenter;
 import cn.samblog.easymvp.sample.presenter.index.MainPresenter;
 import cn.samblog.easymvp.sample.ui.activity.custom.CustomActivity;
+import cn.samblog.easymvp.sample.ui.activity.util.RecyclerViewAdapterDemo1Activity;
 import cn.samblog.easymvp.sample.ui.view.index.IMainView;
 import cn.samblog.lib.easymvp.annotation.Find;
 import cn.samblog.lib.easymvp.annotation.OnClicked;
@@ -29,6 +30,12 @@ public class MainActivity extends BaseActivity implements IMainView {
     void forwardCustom(View view)
     {
         startActivityFromLeftToRight(CustomActivity.class);
+    }
+
+    @OnClicked(R.id.btn_recyclerviewadapter)
+    void forwardRecyclerViewAdapterDemo1(View view)
+    {
+        startActivityFromLeftToRight(RecyclerViewAdapterDemo1Activity.class);
     }
 
     @Override
