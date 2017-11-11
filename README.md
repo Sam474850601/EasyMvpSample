@@ -488,7 +488,7 @@ public class WelcomeActivity extends BaseActivity  implements IWelcomeView {
 
 ```java
    
-class xxx extends Activity 
+class xxx extends BaseActivity 
 {
    //...
     @Inject(hasContextParamConstructor = true)
@@ -500,14 +500,80 @@ class xxx extends Activity 
 
 ### @Model
 
-#### 1.表示注入ContextModel对象
+#### 1.作用：注入ContextModel对象
 
-     ContextModel主要用来分担一般逻辑的代码，当被创建时候，会调用 onCreate(Context context)方法， 也就说，可以在这个方法里面初始化代码。
+     ContextModel是个抽象类，通过继承来使用，表示是Model层类， 主要用来分担业务逻辑的代码。可以在ContextModel子类,BasePresenter子类使用（也可以在BaseActivity子类, BaseFragment, BaseChildFragment子类中使用，但是不推荐）
+    
+#### 2.生命周期
+
+     生命周期只有onCreate(Context context)方法，当被创建时候，会调用 onCreate(Context context)方法， 也就说，可以在这个方法里面初始化代码。
+
+### @Presenter
+
+#### 1.作用：注入IPresneter对象
+
+    IPresneter是个接口，表示是Prenseter层类, 通常通过继承BasePresenter来使用。主要用来分担与Model层，与View层之间交互逻辑的代码.
+
+#### 2.生命周期
+
+##### 相关有onCreate, initPeresenter,  onStart, onResume, onPause, onStop, onDestroy
+ 
+##### 被创建的时候调用onCreate，当视图加载完毕后调用initPeresenter，其他和Activity使用一样，
+与Activity的生命周期同步。
+
+
+### @Resource 作用：注入视图
+
+### @Find 作用：注入view ，相当于findViewById，可以使用在BaseActivity , BaseFragment, BaseChildFragment.如
+
+```java
+
+   {
+        @Find(R.id.tv_title)
+        TextView tvTitle;    
+    
+        //相当于TextView tvTitle = findViewById(R.id.tv_tile);
+   }
+
+```
+
+### @OnCliked 作用：提供点击事件, 可以使用在BaseActivity , BaseFragment, BaseChildFragment. 如
+
+
+```java
+
+   {
+        //...
+        
+        @OnCliked(R.id.btn_login)
+        void onLoginCliked(View view)
+        {
+            
+        }
+        
+        //...
+    
+   }
+
+```
+
+
+
+
+
+
+
      
+ 
+ 
+ 
+ 
+ 
+ 
 
-#### 2.
 
-###  
+
+
 
 
 
