@@ -31,7 +31,7 @@
 ```
 
 
-
+# 第一部分，简单使用演示
 
 ## 举个例子：
 ### 需求：
@@ -460,3 +460,72 @@ public class WelcomeActivity extends BaseActivity  implements IWelcomeView {
 
 
 ![运行结果](https://github.com/Sam474850601/EasyMvpSample/blob/master/part2.png)
+
+
+#### 就这样， mvp构建使用完成。
+
+
+
+# 第二部分，解析注解使用情况。
+
+
+### Inject
+
+#### 1.@Inject可以注入任何无参,如
+
+```java
+
+{
+   //...
+   @Inject
+   Handler handler;
+   
+   //...
+}
+
+```
+#### 2.@Inject可以注入仅带Context构造方法的对象。但是需要注意一点， 如果它在Model或Presenter中使用，那么Context属于ApplicaitonContext,如果在UI层使用，那么它的上下文就是UI的Context
+
+```java
+   
+class xxx extends Activity 
+{
+   //...
+    @Inject(hasContextParamConstructor = true)
+    ProgressDialog progressDialog;
+   //...
+}
+
+```
+
+### @Model
+
+#### 1.表示注入ContextModel对象
+
+     ContextModel主要用来分担一般逻辑的代码，当被创建时候，会调用 onCreate(Context context)方法， 也就说，可以在这个方法里面初始化代码。
+     
+
+#### 2.
+
+###  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
