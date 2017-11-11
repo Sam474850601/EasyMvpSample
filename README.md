@@ -593,7 +593,7 @@ class Test2Model extends ContextModel
 
 那么，这2个对象的是共享的
 
-# 自定义Activity
+# 第三部分，自定义Activity
 
 
 #### 开发过程可能会用到其他类型的Activity, 这里给个简单的例子
