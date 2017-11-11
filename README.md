@@ -11,24 +11,6 @@
 4.对于Activity,内部提供Find注入View，onCliked注解点击事件。内部还有封装好的RecyclerView的万能适配器等。
 
 
-# jcenter 
-
-```gradle
-   compile 'com.yoyonewbie.android.lib:easymvp:1.0.0'
-```
-   
-    
-# maven    
-
-```xml
-<dependency>
-  <groupId>com.yoyonewbie.android.lib</groupId>
-  <artifactId>easymvp</artifactId>
-  <version>1.0.0</version>
-  <type>aar</type>
-</dependency>
-
-```
 
 
 # 第一部分，简单使用演示
