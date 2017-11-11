@@ -520,6 +520,9 @@ class xxx extends BaseActivity 
  
 ##### 被创建的时候调用onCreate，当视图加载完毕后调用initPeresenter，其他和Activity使用一样，
 与Activity的生命周期同步。
+      
+      另外要注意一点，Presenter与BaseAcitivty的生命周期执行顺序
+       IPresneter.onCreate->BaseAcitivty.initViews->IPresneter.initPeresenter
 
 
 ### @Resource 作用：注入视图
@@ -590,7 +593,50 @@ class Test2Model extends ContextModel
 
 那么，这2个对象的是共享的
 
+# 自定义Activity
 
+
+#### 开发过程可能会用到其他类型的Activity, 这里给个简单的例子
+```java
+@Resource(layoutResource = R.layout.activity_custom)
+public class CustomActivity extends Activity implements IView  {
+
+    View rootView;
+
+    Bundle savedInstanceState;
+
+
+    @Presenter(CustomPresenter.class)
+    ICustomPresenter customPresenter;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.savedInstanceState = savedInstanceState;
+        rootView =  EasyHelper.getLayoutView(this, this);
+        setContentView(rootView);
+    }
+
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        EasyHelper.inject(this, rootView, getApplicationContext(), savedInstanceState, new EasyHelper.OnInitViewsCallback() {
+
+            @Override
+            public void onInit(View parentView) {
+                initViews(parentView);
+            }
+        });
+    }
+
+    private void initViews(View parentView)
+    {
+        //初始化View
+    }
+}
+
+```
 
 
 
