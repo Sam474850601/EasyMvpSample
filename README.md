@@ -621,6 +621,91 @@ public class CustomActivity extends Activity implements IView  {
 ```
 
 
+# 使用Sharepreference工具，居于面向对象设计。如
+
+
+
+```java
+
+//需要在Application初始化
+public class MyApplication extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        OrmCache.getInstance().init(getApplicationContext());
+    }
+}
+
+
+
+public class User {
+    @CacheField
+    public String username = "unknown";
+
+    @CacheField
+    public  int age = 0;
+
+    @CacheField
+    public  int id = 0;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+}
+
+
+class UserDao
+{
+    
+        public void saveUser(User user) {
+            //持久化保存到手机，只保存@CacheField注解的字段
+            OrmCache.getInstance().save(user);
+        }
+    
+        public User getCacheUser() {
+            //从手机上拿取
+            return OrmCache.getInstance().getCache(User.class);
+        }
+    
+}
+
+//如果复杂多字段，你可以将它转json字符串保存
+public class Data {
+    
+     @CacheField
+    String json;
+    
+}
+
+public class DataDao
+{
+    //保存 Data
+    public void saveData(Data data)
+    {
+         OrmCache.getInstance().save(data);
+    }
+    
+     //获取 Data
+    public User getCacheUser() {
+             
+       return OrmCache.getInstance().getCache(Data.class);
+    }
+}
+
+
+```
+
+# 具体详细使用，看源码演示代码， 感谢你的阅读
+
+
+
+
+
 
 
 
