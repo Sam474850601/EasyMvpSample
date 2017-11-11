@@ -1,6 +1,7 @@
 package cn.samblog.easymvp.sample.ui.activity.user;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -41,7 +42,7 @@ public class UserActivity extends BaseActivity implements IUserView{
 
     @Override
     protected void initViews(Bundle savedInstanceState, View parentView) {
-
+        Log.e("initViews", "");
     }
 
 
@@ -60,7 +61,8 @@ public class UserActivity extends BaseActivity implements IUserView{
 
     @Override
     public String getLoginUsername() {
-        return etLoginUserName.getText().toString();
+        String name = etLoginUserName.getText().toString();
+        return name;
     }
 
     @Override

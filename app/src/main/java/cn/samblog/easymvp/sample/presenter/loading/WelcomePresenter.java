@@ -75,10 +75,7 @@ public class WelcomePresenter extends BasePresenter<IWelcomeView> implements IWe
         Log.e("MainPresenter", "onResume");
     }
 
-    @Override
-    public void onRestart() {
-        Log.e("MainPresenter", "onRestart");
-    }
+
 
     @Override
     public void onDestroy() {

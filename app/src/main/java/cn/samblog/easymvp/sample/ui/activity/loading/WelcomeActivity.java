@@ -12,6 +12,7 @@ import cn.samblog.easymvp.sample.ui.activity.user.UserActivity;
 import cn.samblog.easymvp.sample.ui.view.loading.IWelcomeView;
 import cn.samblog.lib.easymvp.annotation.Find;
 import cn.samblog.lib.easymvp.annotation.Inject;
+import cn.samblog.lib.easymvp.annotation.OnClicked;
 import cn.samblog.lib.easymvp.annotation.Presenter;
 import cn.samblog.lib.easymvp.annotation.Resource;
 import cn.samblog.lib.easymvp.ui.activity.BaseActivity;
@@ -37,6 +38,7 @@ public class WelcomeActivity extends BaseActivity  implements IWelcomeView {
         tvTitle.setText("you're welcome to use easymvp");
     }
 
+    @OnClicked(R.id.btn_start)
     public void onStartCliked(View view)
     {
         welcomePresenter.startReading();
