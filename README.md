@@ -558,6 +558,39 @@ class xxx extends BaseActivity 
 ```
 
 
+### @SingleInstance 作用：代表使用或全局的对象，表示单例的对象,通常配合@Inject或@Model使用，如
+
+
+```java
+
+class  User
+{
+    
+
+}
+
+
+class Test1Model extends ContextModel
+{
+     @SingleInstance
+     @Inject(UserModel.class)
+     User user; 
+}
+
+
+class Test2Model extends ContextModel
+{
+     @SingleInstance
+     @Inject(UserModel.class)
+     User user; 
+}
+
+
+```
+
+那么，这2个对象的是共享的
+
+
 
 
 
