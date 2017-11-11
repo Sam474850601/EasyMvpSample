@@ -16,7 +16,6 @@ public interface IPresenter<T extends IView> {
     void initPeresenter(Bundle savedInstanceState, T view);
     void setView(T view);
     void onResume();
-    void onRestart();
     void onPause();
     void onStop();
     void onDestroy();

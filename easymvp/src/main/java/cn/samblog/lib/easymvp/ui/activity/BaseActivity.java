@@ -43,8 +43,7 @@ import java.util.Vector;
  * @author Sam
  */
 public abstract class BaseActivity extends AppCompatActivity implements  NotifyAllActivityBroadcastReciever.OnRecieveListener {
-    private SparseArray<View> views =new SparseArray<>();
-    private ArrayList<IPresenter> presenters = new ArrayList<>();
+
     protected void setLayoutBefore() {
         addWindowTranslucentStatus();
     }
@@ -112,136 +111,31 @@ public abstract class BaseActivity extends AppCompatActivity implements  NotifyA
     }
 
 
-    @Override
-    protected void onStop() {
-        _stopPresenters();
 
-        super.onStop();
-    }
-
-    private void _stopPresenters() {
-
-        for(IPresenter presenter : presenters)
-        {
-            presenter.onStop();
-        }
-    }
-
-
-    private void _pausePresenters() {
-        for(IPresenter presenter : presenters)
-        {
-            presenter.onPause();
-        }
-
-    }
-    private void _resumePresenters() {
-        for(IPresenter presenter : presenters)
-        {
-            presenter.onResume();
-        }
-
-    }
-
-    private void _restartPresenters() {
-        for(IPresenter presenter : presenters)
-        {
-            presenter.onRestart();
-        }
-
-    }
-
-
-    private void _startPresenters() {
-
-        for(IPresenter presenter : presenters)
-        {
-            presenter.onStart();
-        }
-
-    }
-
-
-    @Override
-    protected void onPause() {
-        _pausePresenters();
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        _resumePresenters();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        _restartPresenters();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        _startPresenters();
-    }
 
     @Override
     protected void onDestroy() {
         notifyAllActivityBroadcastReciever.release(getApplicationContext());
-        _destroyPresenters();
         EasyHelper.release(this);
         super.onDestroy();
     }
 
 
-    private void _destroyPresenters() {
 
-        for(IPresenter presenter : presenters)
-        {
-            presenter.onDestroy();
-        }
-
-    }
 
 
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transition = fragmentManager.beginTransaction();
-        List<Fragment> fragmentList = fragmentManager.getFragments();
-        if(null != fragmentList &&!fragmentList.isEmpty())
-        {
-            for(Fragment fragment : fragmentList)
-            {
-                transition.remove(fragment);
+        EasyHelper.inject(this, mParentView, getApplicationContext(), mSvedInstanceState, new EasyHelper.OnInitViewsCallback() {
+            @Override
+            public void onInit() {
+                initViews(mSvedInstanceState,mParentView);
+                injectLayoutAfter(mParentView);
             }
-            transition.commitAllowingStateLoss();
-        }
-        EasyHelper.inject(this,mParentView, this, presenters);
-        injectLayoutAfter(mParentView);
-
-
-        //创建presenter
-        for(IPresenter presenter : presenters)
-        {
-            presenter.setIntent(getIntent());
-            presenter.onCreate(getApplicationContext());
-            presenter.setView((IView) this);
-        }
-
-        initViews(mSvedInstanceState,mParentView);
-
-        //初始化presenter
-        for(IPresenter presenter : presenters)
-        {
-            presenter.initPeresenter(mSvedInstanceState, presenter.getView());
-        }
+        });
 
     }
-
-
 
 
     public void startActivity(Class<? extends Activity> activityClass)
@@ -251,16 +145,6 @@ public abstract class BaseActivity extends AppCompatActivity implements  NotifyA
     }
 
 
-    public <T>  T getPresenter(Class<? extends IPresenter> presenterClass) {
-        for(IPresenter presenter : presenters)
-        {
-            if(presenter.getClass() == presenterClass )
-            {
-                 return (T) presenter;
-            }
-        }
-        return null;
-    }
 
 
     public void startActivityFromLeftToRight(Intent intent)

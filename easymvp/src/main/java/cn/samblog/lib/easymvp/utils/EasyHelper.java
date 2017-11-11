@@ -1,7 +1,15 @@
 package cn.samblog.lib.easymvp.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +23,15 @@ import cn.samblog.lib.easymvp.annotation.Resource;
 import cn.samblog.lib.easymvp.annotation.SingleInstance;
 import cn.samblog.lib.easymvp.model.ContextModel;
 import cn.samblog.lib.easymvp.presenter.IPresenter;
+import cn.samblog.lib.easymvp.ui.view.IView;
 
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,15 +45,183 @@ public final  class EasyHelper {
 
     private  final static  Manager manager = new Manager();
 
+
+
+
     /**
-     * 如果是单例，那么用包名做区
+     * 用户缓存单例注入
      */
     private  final static class Manager
     {
 
-        final Map<String, ContextModel> models =new Hashtable<String, ContextModel>();
-        final Map<String, Object> others =new Hashtable<String, Object>();
+        final Map<String, ContextModel> models =new HashMap<>();
+        final Map<String, Object> others =new HashMap<String, Object>();
     }
+
+
+    /**
+     * 为Presenter创建后提供的生命周期
+     */
+    public  final static class PresentersManager
+    {
+
+
+        public static SupportPresentersManager newSupportPresentersManager()
+        {
+             return new SupportPresentersManager();
+
+        }
+
+        public static DefaultPresentersManager newDefaultPresentersManager()
+        {
+            return new DefaultPresentersManager();
+
+        }
+
+
+
+        private static  void _stopPresenters( List<IPresenter> presenters) {
+
+            for(IPresenter presenter : presenters)
+            {
+                presenter.onStop();
+            }
+        }
+
+
+        private static void _pausePresenters(List<IPresenter> presenters) {
+            for(IPresenter presenter : presenters)
+            {
+                presenter.onPause();
+            }
+
+        }
+        private static void _resumePresenters(List<IPresenter> presenters) {
+            for(IPresenter presenter : presenters)
+            {
+                presenter.onResume();
+            }
+
+        }
+
+
+
+
+        private static void _startPresenters(List<IPresenter> presenters) {
+
+            for(IPresenter presenter : presenters)
+            {
+                presenter.onStart();
+            }
+
+        }
+
+        private static void _destroyPresenters(List<IPresenter> presenters) {
+
+            for(IPresenter presenter : presenters)
+            {
+                presenter.onDestroy();
+            }
+
+        }
+
+        public static class DefaultPresentersManager extends android.app.Fragment
+        {
+            private final List<IPresenter> presenters = new ArrayList<>();
+
+            public List<IPresenter> getPresenters() {
+                return presenters;
+            }
+
+
+            @Override
+           public  void onStop() {
+            _stopPresenters(presenters);
+            super.onStop();
+          }
+
+
+
+        @Override
+        public void onPause() {
+            _pausePresenters(presenters);
+            super.onPause();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            _resumePresenters(presenters);
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            _startPresenters(presenters);
+        }
+
+        @Override
+        public void onDestroy() {
+            _destroyPresenters(presenters);
+            super.onDestroy();
+        }
+
+        }
+
+        public static class SupportPresentersManager extends Fragment
+        {
+            private final List<IPresenter> presenters = new ArrayList<>();
+
+            public List<IPresenter> getPresenters() {
+                return presenters;
+            }
+
+            @Override
+            public  void onStop() {
+                _stopPresenters(presenters);
+                super.onStop();
+            }
+
+
+
+            @Override
+            public void onPause() {
+                _pausePresenters(presenters);
+                super.onPause();
+            }
+
+            @Override
+            public void onResume() {
+                super.onResume();
+                _resumePresenters(presenters);
+            }
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                _startPresenters(presenters);
+            }
+
+            @Override
+            public void onDestroy() {
+                _destroyPresenters(presenters);
+                super.onDestroy();
+            }
+
+        }
+
+    }
+
+    public static void injectMode(ContextModel contextModel, Context context) {
+        EasyHelper.inject(contextModel, null, context, null, null);
+    }
+
+
+    public static void injectWindow(Object basePopupWindowBuilder, View windowView, Context context) {
+        EasyHelper.inject(basePopupWindowBuilder, windowView,context, null, null);
+    }
+
+
 
     public static  <T>  T getSingleModel(Class<? extends T> classType  )
     {
@@ -201,17 +379,110 @@ public final  class EasyHelper {
     }
 
 
+    public interface OnInitViewsCallback
+    {
+        void onInit();
+    }
+
+
+    public static void initFragmentV4(Fragment containerObject, View mParentView)
+    {
+        EasyHelper.inject(containerObject,mParentView, containerObject.getActivity().getApplicationContext(), null, null);
+    }
+
+
+
     /**
      * 注入对应实例
      */
-    public static void inject( Object containerObject,  View parentView, Context context,List<IPresenter> presenters)
+    public static void inject( Object containerObject,  View parentView, Context appContext,Bundle savedInstanceState, OnInitViewsCallback callback)
     {
-
         SparseArray<View> viewSparseArray = new  SparseArray<View>();
-        injectFields(containerObject,parentView, context, viewSparseArray,presenters);
+
+        List<IPresenter> presenters = getPresentersByActivityContainer(containerObject);
+
+
+        injectFields(containerObject,parentView, appContext, viewSparseArray, presenters);
+
+        if(containerObject instanceof Activity && null != presenters)
+        {
+            Activity activity = (Activity) containerObject;
+            //创建presenter
+            for(IPresenter presenter : presenters)
+            {
+                presenter.setIntent(activity.getIntent());
+                presenter.onCreate(activity.getApplicationContext());
+                presenter.setView((IView) activity);
+            }
+        }
+        if(null != callback)
+        {
+            callback.onInit();
+        }
+
+
+        if(null != presenters)
+        {
+            //初始化presenter
+            for(IPresenter presenter : presenters)
+            {
+                presenter.initPeresenter(savedInstanceState, presenter.getView());
+            }
+        }
+
         injectMethods(containerObject,  parentView, viewSparseArray);
 
     }
+
+
+    /**
+     * 如果这是个Activity容器， 那么添加PresentersManager，并返回他的 List<IPresenter>
+     * @param containerObject 注解容器
+     * @return IPresenter集合
+     */
+
+    private static List<IPresenter>  getPresentersByActivityContainer(Object containerObject)
+    {
+
+
+        List<IPresenter> presenters = null;
+
+
+        if(containerObject instanceof  AppCompatActivity)
+        {
+            AppCompatActivity activityContainer = (AppCompatActivity) containerObject;
+            FragmentManager fragmentManager = activityContainer.getSupportFragmentManager();
+            FragmentTransaction transition = fragmentManager.beginTransaction();
+            List<Fragment> fragmentList = fragmentManager.getFragments();
+            if(null != fragmentList &&!fragmentList.isEmpty())
+            {
+                for(Fragment fragment : fragmentList)
+                {
+                    transition.remove(fragment);
+                }
+                transition.commitAllowingStateLoss();
+            }
+
+            transition = fragmentManager.beginTransaction();
+            PresentersManager.SupportPresentersManager presentersManager = PresentersManager.newSupportPresentersManager();
+            presenters = presentersManager.getPresenters();
+            transition.add(presentersManager, PresentersManager.class.getName());
+            transition.commit();
+        }
+        else if (containerObject instanceof  Activity && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            Activity activity = (Activity) containerObject;
+
+            android.app.FragmentManager fragmentManager  =  activity.getFragmentManager();
+            android.app.FragmentTransaction transition  = fragmentManager.beginTransaction();
+            PresentersManager.DefaultPresentersManager presentersManager =  PresentersManager.newDefaultPresentersManager();
+            presenters = presentersManager.getPresenters();
+            transition.add(presentersManager, PresentersManager.class.getName());
+            transition.commit();
+        }
+        return presenters;
+    }
+
 
 
 
@@ -267,6 +538,19 @@ public final  class EasyHelper {
                 }
                 else if(field.isAnnotationPresent(Inject.class))
                 {
+                    if(containerObject instanceof  Activity)
+                    {
+                        context = (Activity) containerObject;
+                    }
+                    else if(containerObject instanceof  Fragment)
+                    {
+                        context =( (Fragment) containerObject).getContext();
+                    }
+
+                    else if(containerObject instanceof android.app.Fragment)
+                    {
+                        context =( (android.app.Fragment) containerObject).getActivity();
+                    }
                     EasyHelper.injectObject(context, containerObject, field);
                 }
                 else if( field.isAnnotationPresent(Model.class))
@@ -289,6 +573,13 @@ public final  class EasyHelper {
             }
         }
 
+    }
+
+
+
+    public static void injectPresenter(IPresenter containerObject, Context applicationContext)
+    {
+        EasyHelper.inject(containerObject, null, applicationContext, null , null);
     }
 
     public static IPresenter injectPresenter(Object containerObject, Field field)

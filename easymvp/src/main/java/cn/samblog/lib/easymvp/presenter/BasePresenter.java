@@ -20,7 +20,7 @@ public  abstract  class BasePresenter<T extends IView> implements IPresenter<T> 
 
     @Override
     public void onCreate(Context applicationContext) {
-        EasyHelper.inject(this, null, applicationContext, null);
+        EasyHelper.injectPresenter(this, applicationContext);
         contextWeakReference = new WeakReference<Context>(applicationContext);
     }
 
@@ -29,6 +29,21 @@ public  abstract  class BasePresenter<T extends IView> implements IPresenter<T> 
     @Override
     public void setView(T view) {
         mView = new WeakReference<T>( view);
+    }
+
+    @Override
+    public void onResume() {
+
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
+    @Override
+    public void onStop() {
+
     }
 
     @Override
@@ -53,30 +68,10 @@ public  abstract  class BasePresenter<T extends IView> implements IPresenter<T> 
     }
 
     @Override
-    public void onStop(){
+    public void onStart() {
 
     }
 
-    @Override
-    public void onResume(){
-
-    }
-
-    @Override
-    public void onRestart(){
-
-    }
-
-    @Override
-    public void onPause(){
-
-    }
-
-    @Override
-    public void onStart()
-    {
-
-    }
 
     Intent intent;
     @Override
