@@ -11,9 +11,9 @@ import java.lang.ref.WeakReference;
  */
 public abstract class ContextModel {
     WeakReference<Context> weakReference;
-    protected   void onCreate(Context context){
-        weakReference = new WeakReference<Context>(context);
-        EasyHelper.injectMode(this, context);
+    protected   void onCreate(Context appContext){
+        weakReference = new WeakReference<Context>(appContext);
+        EasyHelper.injectMode(this, appContext);
     }
     private  final   void _onCreate(Context context)
     {
