@@ -129,10 +129,11 @@ public abstract class BaseActivity extends AppCompatActivity implements  NotifyA
         super.onContentChanged();
         EasyHelper.inject(this, mParentView, getApplicationContext(), mSvedInstanceState, new EasyHelper.OnInitViewsCallback() {
             @Override
-            public void onInit() {
+            public void onInit(View parentView) {
                 initViews(mSvedInstanceState,mParentView);
                 injectLayoutAfter(mParentView);
             }
+
         });
 
     }

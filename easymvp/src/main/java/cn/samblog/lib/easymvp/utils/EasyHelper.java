@@ -273,7 +273,8 @@ public final  class EasyHelper {
             {
                 Resource resource = (Resource) anntation;
                 int layout =  resource.layoutResource();
-                return LayoutInflater.from(context).inflate(layout, null);
+                View rootView =  LayoutInflater.from(context).inflate(layout, null);
+                return rootView;
             }
         }
         return null;
@@ -381,7 +382,8 @@ public final  class EasyHelper {
 
     public interface OnInitViewsCallback
     {
-        void onInit();
+        void onInit(View parentView);
+
     }
 
 
@@ -412,12 +414,16 @@ public final  class EasyHelper {
             {
                 presenter.setIntent(activity.getIntent());
                 presenter.onCreate(activity.getApplicationContext());
-                presenter.setView((IView) activity);
+                if(activity instanceof IView)
+                {
+                    presenter.setView((IView) activity);
+                }
+
             }
         }
         if(null != callback)
         {
-            callback.onInit();
+            callback.onInit(parentView);
         }
 
 

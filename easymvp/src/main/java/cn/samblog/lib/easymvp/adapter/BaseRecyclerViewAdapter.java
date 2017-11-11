@@ -25,10 +25,10 @@ import java.util.List;
 public abstract class BaseRecyclerViewAdapter<C extends IHolder,G extends IHolder,H extends IHolder,F extends IHolder> extends RecyclerView.Adapter
         implements OnContentItemClickedListener, OnGroupItemClickedListener, OnFooterItemClickedListener, OnHeaderItemClickedListener
 {
-    protected final int POSITION_CONTENT = 0;
-    protected final int POSITION_GROUP = 1;
-    protected final int POSITION_HEADER = 2;
-    protected final int POSITION_FOOTER= 3;
+    protected static final int POSITION_CONTENT = 0;
+    protected static final int POSITION_GROUP = 1;
+    protected static final int POSITION_HEADER = 2;
+    protected static final int POSITION_FOOTER= 3;
 
     private  List<Item> itemList = new ArrayList<Item>();
 
@@ -77,7 +77,7 @@ public abstract class BaseRecyclerViewAdapter<C extends IHolder,G extends IHolde
         }
     }
 
-    public void addItems(List<Item> items)
+    public void addItems(List<? extends Item> items)
     {
         synchronized (this)
         {
@@ -298,14 +298,14 @@ public abstract class BaseRecyclerViewAdapter<C extends IHolder,G extends IHolde
                     Resource resource = (Resource) holderClass.getAnnotation(Resource.class);
                     int layout = resource.layoutResource();
                     View convertView =  LayoutInflater.from(viewGroup.getContext()).inflate(layout, viewGroup, false);
-                    AutoUtils.auto(convertView);
+                    onContentViewPrepare(convertView);
                     return  new ContentViewHolder(convertView);
                 }
                 case Item.TYPE_HEADER: {
                     Class holderClass = getSupportClass(POSITION_HEADER);
                     Resource resource = (Resource) holderClass.getAnnotation(Resource.class);
                     View convertView = LayoutInflater.from(viewGroup.getContext()).inflate(resource.layoutResource(), viewGroup, false);
-                    AutoUtils.auto(convertView);
+                     onHeaderViewPrepare(convertView);
                     return new HeaderViewHolder(convertView);
 
                 }
@@ -314,7 +314,7 @@ public abstract class BaseRecyclerViewAdapter<C extends IHolder,G extends IHolde
                     Class holderClass = getSupportClass(POSITION_GROUP);
                     Resource resource = (Resource) holderClass.getAnnotation(Resource.class);
                     View convertView = LayoutInflater.from(viewGroup.getContext()).inflate(resource.layoutResource(), viewGroup, false);
-                    AutoUtils.auto(convertView);
+                    onGroupViewPrepare(convertView);
                     return new GroupHolder(convertView);
                 }
 
@@ -322,7 +322,7 @@ public abstract class BaseRecyclerViewAdapter<C extends IHolder,G extends IHolde
                     Class holderClass = getSupportClass(POSITION_FOOTER);
                     Resource resource = (Resource) holderClass.getAnnotation(Resource.class);
                     View convertView = LayoutInflater.from(viewGroup.getContext()).inflate(resource.layoutResource(), viewGroup, false);
-                    AutoUtils.auto(convertView);
+                    onFootViewPrepare(convertView);
                     return new FooterViewHolder(convertView);
                 }
             }
@@ -349,6 +349,24 @@ public abstract class BaseRecyclerViewAdapter<C extends IHolder,G extends IHolde
     protected  void onGroupUpdate(G holder, int position, Item item) {
 
     }
+
+    protected  void onContentViewPrepare(View view) {
+
+    }
+
+
+    protected  void onHeaderViewPrepare(View view) {
+
+    }
+
+    protected  void onGroupViewPrepare(View view) {
+
+    }
+
+    protected  void onFootViewPrepare(View view) {
+
+    }
+
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
@@ -380,8 +398,10 @@ public abstract class BaseRecyclerViewAdapter<C extends IHolder,G extends IHolde
 
     @Override
     public int getItemViewType(int position) {
+
         return itemList.get(position).type;
     }
+
 
     @Override
     public int getItemCount() {

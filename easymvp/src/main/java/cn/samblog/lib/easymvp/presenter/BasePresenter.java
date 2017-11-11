@@ -49,19 +49,44 @@ public  abstract  class BasePresenter<T extends IView> implements IPresenter<T> 
     @Override
     public T getView()
     {
-        return mView.get();
+        T iView = null;
+        try {
+            iView = mView.get();
+
+        }
+        catch (Exception ex)
+        {
+        }
+        return iView;
     }
 
     protected  Context getAppContext()
     {
-        return contextWeakReference.get();
+        Context appContext =  null;
+        try {
+            appContext = contextWeakReference.get();
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return appContext;
     }
 
 
     @Override
     public  void onDestroy(){
-        mView.clear();
-        contextWeakReference.clear();
+        try
+        {
+            mView.clear();
+            contextWeakReference.clear();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
         System.runFinalization();
         System.gc();
         EasyHelper.release(this);
