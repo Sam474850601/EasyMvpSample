@@ -1,6 +1,14 @@
-# 欢迎使用EasyMvp
 
-这是个简单易用的mvp框架。通过注入式来将各层进行分离，层次清晰，易维护.(kotlin项目兼容)
+#前言
+
+由于前年学习MVP架构后，对其有了深刻的认知。离职后到了下家公司决定开发个MVP框架,投入使用。大概花了一周的时间包括设计，编码，自测搞完了这套框架。随着投入开发时，还是有不少问题，不过经过不断的淬炼，使用了一年到了如今的稳定版。最近发现还有耦合性还有优化的空间，于是提升了质量，开源了分享给大家，共同讨论相互学习
+
+转载请声明出处： 
+http://blog.csdn.net/YoYo_Newbie/article/details/78509820
+
+# 欢迎使用EasyMVP
+
+这是个简单易用的mvp轻量级框架。通过注入式来将各层进行分离，层次清晰，易维护.(kotlin项目兼容)
 
 1.提供Model层, View层，Presenter层注解。
 
@@ -10,7 +18,7 @@
 
 4.对于Activity,内部提供Find注入View，onCliked注解点击事件。内部还有封装好的RecyclerView的万能适配器等。
 
-
+源码地址：https://github.com/Sam474850601/EasyMvpSample
 
 
 # 第一部分，简单使用演示
@@ -453,7 +461,7 @@ public class WelcomeActivity extends BaseActivity  implements IWelcomeView {
 
 ### Inject
 
-#### 1.@Inject可以注入任何无参,如
+#### 1.@Inject可以注入任何无参对象,如
 
 ```java
 
@@ -470,7 +478,7 @@ public class WelcomeActivity extends BaseActivity  implements IWelcomeView {
 
 ```java
    
-class xxx extends BaseActivity 
+class xxx extends BaseActivity 
 {
    //...
     @Inject(hasContextParamConstructor = true)
@@ -484,17 +492,17 @@ class xxx extends BaseActivity 
 
 #### 1.作用：注入ContextModel对象
 
-     ContextModel是个抽象类，通过继承来使用，表示是Model层类， 主要用来分担业务逻辑的代码。可以在ContextModel子类,BasePresenter子类使用（也可以在BaseActivity子类, BaseFragment, BaseChildFragment子类中使用，但是不推荐）
-    
+     ContextModel是个抽象类，通过继承来使用，表示是Model层类， 主要用来分担业务逻辑的代码。可以在ContextModel子类,BasePresenter子类使用（也可以在BaseActivity子类, BaseFragment, BaseChildFragment子类中使用，但是不推荐）
+    
 #### 2.生命周期
 
-     生命周期只有onCreate(Context context)方法，当被创建时候，会调用 onCreate(Context context)方法， 也就说，可以在这个方法里面初始化代码。
+     生命周期只有onCreate(Context context)方法，当被创建时候，会调用 onCreate(Context context)方法， 也就说，可以在这个方法里面初始化代码。
 
 ### @Presenter
 
 #### 1.作用：注入IPresneter对象
 
-    IPresneter是个接口，表示是Prenseter层类, 通常通过继承BasePresenter来使用。主要用来分担与Model层，与View层之间交互逻辑的代码.
+    IPresneter是个接口，表示是Prenseter层类, 通常通过继承BasePresenter来使用。主要用来分担与Model层，与View层之间交互逻辑的代码.
 
 #### 2.生命周期
 
@@ -701,43 +709,4 @@ public class DataDao
 ```
 
 # 具体详细使用，看源码演示代码， 感谢你的阅读
-
-
-
-
-
-
-
-
-     
- 
- 
- 
- 
- 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
