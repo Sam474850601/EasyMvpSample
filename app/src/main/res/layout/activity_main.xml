@@ -45,6 +45,14 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="RecyclerView万能 多布局使用"
+        android:layout_marginTop="10dp"
+        android:id="@+id/btn_recyclerviewadapter2"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="fragment使用"
         android:layout_marginTop="10dp"
         android:id="@+id/btn_fragment"

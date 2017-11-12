@@ -25,6 +25,7 @@
         <activity android:name=".ui.activity.custom.CustomActivity"/>
 
         <activity android:name=".ui.activity.other.RecyclerViewAdapterDemo1Activity" />
+        <activity android:name=".ui.activity.other.RecyclerViewAdapterDemo2Activity" />
         <activity android:name=".ui.activity.other.SimpleFragmentActivity"/>
 
     </application>

@@ -9,6 +9,7 @@ import cn.samblog.easymvp.sample.presenter.index.IMainPresenter;
 import cn.samblog.easymvp.sample.presenter.index.MainPresenter;
 import cn.samblog.easymvp.sample.ui.activity.custom.CustomActivity;
 import cn.samblog.easymvp.sample.ui.activity.other.RecyclerViewAdapterDemo1Activity;
+import cn.samblog.easymvp.sample.ui.activity.other.RecyclerViewAdapterDemo2Activity;
 import cn.samblog.easymvp.sample.ui.activity.other.SimpleFragmentActivity;
 import cn.samblog.easymvp.sample.ui.view.index.IMainView;
 import cn.samblog.lib.easymvp.annotation.Find;
@@ -38,6 +39,14 @@ public class MainActivity extends BaseActivity implements IMainView {
     {
         startActivityFromLeftToRight(RecyclerViewAdapterDemo1Activity.class);
     }
+
+
+    @OnClicked(R.id.btn_recyclerviewadapter2)
+    void forwardRecyclerViewAdapterDemo2(View view)
+    {
+        startActivityFromLeftToRight(RecyclerViewAdapterDemo2Activity.class);
+    }
+
 
     @OnClicked(R.id.btn_fragment)
     void forwardFragment(View view)

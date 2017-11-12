@@ -10,12 +10,12 @@ import android.widget.Toast;
 import java.util.List;
 
 import cn.samblog.easymvp.sample.R;
+import cn.samblog.easymvp.sample.bean.Info;
 import cn.samblog.easymvp.sample.presenter.other.IRecyclerViewAdapterDemoPresenter;
-import cn.samblog.easymvp.sample.presenter.other.RecyclerViewAdapterDemo1Presenter;
+import cn.samblog.easymvp.sample.presenter.other.RecyclerViewAdapterDemo2Presenter;
 import cn.samblog.easymvp.sample.ui.view.other.IRecyclerViewAdapterDemoview;
 import cn.samblog.lib.easymvp.adapter.BaseRecyclerViewAdapter;
 import cn.samblog.lib.easymvp.adapter.IHolder;
-import cn.samblog.lib.easymvp.adapter.Null;
 import cn.samblog.lib.easymvp.annotation.Find;
 import cn.samblog.lib.easymvp.annotation.Inject;
 import cn.samblog.lib.easymvp.annotation.OnClicked;
@@ -25,13 +25,13 @@ import cn.samblog.lib.easymvp.bean.Item;
 import cn.samblog.lib.easymvp.ui.activity.BaseActivity;
 
 /**
- *  万能RecyclerViewAdapter演示。
+ *  万能RecyclerViewAdapte 多类型布局演示。
  *
  *
  * @author Sam
  */
 @Resource(layoutResource = R.layout.activity_recyclerviewadapterdemo)
-public class RecyclerViewAdapterDemo1Activity extends BaseActivity implements IRecyclerViewAdapterDemoview
+public class RecyclerViewAdapterDemo2Activity extends BaseActivity implements IRecyclerViewAdapterDemoview
 {
     @Find(R.id.list)
     RecyclerView recyclerView;
@@ -40,7 +40,7 @@ public class RecyclerViewAdapterDemo1Activity extends BaseActivity implements IR
     MyAdapter myAdapter;
 
 
-    @Presenter(RecyclerViewAdapterDemo1Presenter.class)
+    @Presenter(RecyclerViewAdapterDemo2Presenter.class)
     IRecyclerViewAdapterDemoPresenter presenter;
 
 
@@ -59,6 +59,8 @@ public class RecyclerViewAdapterDemo1Activity extends BaseActivity implements IR
         recyclerView.setAdapter(myAdapter);
     }
 
+
+
     @Override
     public void update(List<? extends Item> items) {
         myAdapter.addItems(items);
@@ -74,8 +76,40 @@ public class RecyclerViewAdapterDemo1Activity extends BaseActivity implements IR
 
     }
 
+    @Resource(layoutResource = R.layout.adapter_style2)
+    public static class GroupHodler implements IHolder
+    {
+        @Find(R.id.tv_message)
+        TextView tvMessage;
 
-    public static class MyAdapter extends BaseRecyclerViewAdapter<ContentHodler,Null, Null, Null>
+    }
+
+    @Resource(layoutResource = R.layout.adapter_style3)
+    public static class FootHodler implements IHolder
+    {
+        @Find(R.id.tv_message)
+        TextView tvMessage;
+
+        @Find(R.id.tv_title)
+        TextView tvTitle;
+
+    }
+
+    @Resource(layoutResource = R.layout.adapter_style4)
+    public static class HeaderHodler implements IHolder
+    {
+        @Find(R.id.tv_message)
+        TextView tvMessage;
+
+        @Find(R.id.tv_title)
+        TextView tvTitle;
+
+    }
+
+
+
+
+    public static class MyAdapter extends BaseRecyclerViewAdapter<ContentHodler,GroupHodler, HeaderHodler, FootHodler>
     {
 
         @Override
@@ -86,7 +120,7 @@ public class RecyclerViewAdapterDemo1Activity extends BaseActivity implements IR
         @Override
         protected void onContentUpdate(ContentHodler holder, int position, Item item) {
             String text = item.getData();
-            holder.tvMessage.setText("测试："+position+", text"+text);
+            holder.tvMessage.setText("onContentUpdate测试："+position+", text"+text);
         }
 
         @Override
@@ -102,6 +136,42 @@ public class RecyclerViewAdapterDemo1Activity extends BaseActivity implements IR
             }
             String data= item.getData();
             Toast.makeText(view.getContext(), text+"数据:"+data,Toast.LENGTH_SHORT).show();
+        }
+
+
+        @Override
+        protected void onFooterUpdate(FootHodler holder, int position, Item item) {
+            Info info = item.getData();
+            holder.tvMessage.setText(info.getMessage());
+            holder.tvTitle.setText(info.getTitle());
+        }
+
+        @Override
+        public void onFooterClicked(View view, int position, Item item, boolean isLongClick) {
+            Toast.makeText(view.getContext(), "onFooterClicked",Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected void onGroupUpdate(GroupHodler holder, int position, Item item) {
+            String text = item.getData();
+            holder.tvMessage.setText("onGroupUpdate测试："+position+", text"+text);
+        }
+
+        @Override
+        public void onGroupClicked(View view, int position, Item item, boolean isLongClick) {
+            Toast.makeText(view.getContext(), "onGroupClicked",Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected void onHeaderUpdate(HeaderHodler holder, int position, Item item) {
+            Info info = item.getData();
+            holder.tvMessage.setText(info.getMessage());
+            holder.tvTitle.setText(info.getTitle());
+        }
+
+        @Override
+        public void onHeaderClicked(View view, int position, Item item, boolean isLongClick) {
+            Toast.makeText(view.getContext(), "onGroupClicked",Toast.LENGTH_SHORT).show();
         }
     }
 
