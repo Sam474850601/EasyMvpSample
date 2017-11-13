@@ -32,7 +32,7 @@
   <groupId>com.yoyonewbie.android.lib</groupId>
   <artifactId>easymvp</artifactId>
   <version>1.0.1</version>
-  <type>apk</type>
+  <type>aar</type>
 </dependency>
 
 ```
