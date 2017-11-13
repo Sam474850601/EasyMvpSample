@@ -131,8 +131,8 @@ public abstract class BaseActivity extends AppCompatActivity implements  NotifyA
         presenters =   EasyHelper.inject(this, mParentView, getApplicationContext(), mSvedInstanceState, new EasyHelper.OnInitViewsCallback() {
             @Override
             public void onInit(View parentView) {
-                initViews(mSvedInstanceState,mParentView);
                 injectLayoutAfter(mParentView);
+                initViews(mSvedInstanceState,mParentView);
             }
 
         });
