@@ -3,8 +3,7 @@
 
 由于前年学习MVP架构后，对其有了深刻的认知。离职后到了下家公司决定开发个MVP框架,投入使用。大概花了一周的时间包括设计，编码，自测搞完了这套框架。随着投入开发时，还是有不少问题，不过经过不断的淬炼，使用了一年到了如今的稳定版。最近发现还有耦合性优化的空间，于是提升了质量，开源了分享给大家，共同讨论相互学习
 
-转载请声明出处： 
-http://blog.csdn.net/YoYo_Newbie/article/details/78509820
+
 
 # 欢迎使用EasyMVP
 
@@ -18,9 +17,34 @@ http://blog.csdn.net/YoYo_Newbie/article/details/78509820
 
 4.对于Activity,内部提供Find注入View，onCliked注解点击事件。内部还有封装好的RecyclerView的万能适配器等。
 
-源码地址：https://github.com/Sam474850601/EasyMvpSample
 
 
+
+# 引入代码
+
+### 源码地址：https://github.com/Sam474850601/EasyMvpSample
+
+### Maven
+
+```xml
+
+<dependency>
+  <groupId>com.yoyonewbie.android.lib</groupId>
+  <artifactId>easymvp</artifactId>
+  <version>1.0.1</version>
+  <type>apk</type>
+</dependency>
+
+```
+
+
+### jcenter
+
+```gradle
+
+ compile 'com.yoyonewbie.android.lib:easymvp:1.0.1'
+
+```
 # 第一部分，简单使用演示
 
 ## 举个例子：
