@@ -24,7 +24,7 @@
 
 # 类图
 
-![架构类图](![架构图](https://github.com/Sam474850601/EasyMvpSample/blob/master/class.png))
+![架构类图](https://github.com/Sam474850601/EasyMvpSample/blob/master/class.png)
 
 
 # 引入代码
