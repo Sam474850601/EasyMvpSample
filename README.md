@@ -28,12 +28,15 @@
 
 # 类图
 
+###  ContextModel <-> IPresneter
 
-![第一部分](https://github.com/Sam474850601/EasyMvpSample/blob/master/class.png)
+![第一部分类图](https://github.com/Sam474850601/EasyMvpSample/blob/master/class2.png)
 
 
+###  IPresneter <-> IView
 
-![第二部分](https://github.com/Sam474850601/EasyMvpSample/blob/master/class2.png)
+
+![第二部分类图](https://github.com/Sam474850601/EasyMvpSample/blob/master/class.png)
 
 
 # 引入代码
