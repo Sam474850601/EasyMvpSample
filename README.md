@@ -40,7 +40,7 @@
 
 # 时序图
 
-![](https://github.com/Sam474850601/EasyMvpSample/blob/master/life.png)
+![时序图](https://github.com/Sam474850601/EasyMvpSample/blob/master/life.png)
 
 
 
