@@ -21,7 +21,7 @@
 
 # 架构示意图
 
-![架构图](https://github.com/Sam474850601/EasyMvpSample/blob/master/Architecture.png)
+![架构图](https://github.com/Sam474850601/EasyMvpSample/blob/master/arc.png)
 
 
 
