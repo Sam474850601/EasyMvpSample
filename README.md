@@ -28,7 +28,7 @@
 
 # 类图
 
-###  CotextModel <-> IPresneter
+###  ContextModel <-> IPresneter
 
 ![第一部分类图](https://github.com/Sam474850601/EasyMvpSample/blob/master/class2.png)
 
