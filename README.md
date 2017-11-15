@@ -17,14 +17,23 @@
 
 4.对于Activity,内部提供Find注入View，onCliked注解点击事件。内部还有封装好的RecyclerView的万能适配器等。
 
+
+
 # 架构示意图
 
 ![架构图](https://github.com/Sam474850601/EasyMvpSample/blob/master/Architecture.png)
 
 
+
+
 # 类图
 
-![架构类图](https://github.com/Sam474850601/EasyMvpSample/blob/master/class.png)
+
+![第一部分](https://github.com/Sam474850601/EasyMvpSample/blob/master/class.png)
+
+
+
+![第二部分](https://github.com/Sam474850601/EasyMvpSample/blob/master/class2.png)
 
 
 # 引入代码
