@@ -24,7 +24,7 @@
 ![架构图](https://github.com/Sam474850601/EasyMvpSample/blob/master/arc.png)
 
 
-# 类图
+# 框架类图
 
 ###  ContextModel <-> IPresneter
 
@@ -38,7 +38,7 @@
 
 
 
-# 时序图
+# 生命周期时序图
 
 ![时序图](https://github.com/Sam474850601/EasyMvpSample/blob/master/life.png)
 
