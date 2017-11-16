@@ -24,8 +24,6 @@
 ![架构图](https://github.com/Sam474850601/EasyMvpSample/blob/master/arc.png)
 
 
-
-
 # 类图
 
 ###  ContextModel <-> IPresneter
@@ -37,6 +35,13 @@
 
 
 ![第二部分类图](https://github.com/Sam474850601/EasyMvpSample/blob/master/class.png)
+
+
+
+# 时序图
+
+![时序图](https://github.com/Sam474850601/EasyMvpSample/blob/master/life.png)
+
 
 
 # 引入代码
@@ -142,7 +147,7 @@ public class WelcomeActivity extends BaseActivity
      @Override
     protected void initViews(Bundle savedInstanceState, View parentView) 
     {
-    
+      
     }
     
 }
