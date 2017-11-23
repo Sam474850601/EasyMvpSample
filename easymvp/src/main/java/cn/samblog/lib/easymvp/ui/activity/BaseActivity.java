@@ -6,37 +6,17 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
-import com.zhy.autolayout.AutoLayoutActivity;
+import java.util.List;
 
-import cn.samblog.lib.easymvp.annotation.Presenter;
-import cn.samblog.lib.easymvp.presenter.BasePresenter;
 import cn.samblog.lib.easymvp.presenter.IPresenter;
 import cn.samblog.lib.easymvp.reciever.NotifyAllActivityBroadcastReciever;
-import cn.samblog.lib.easymvp.ui.view.IView;
-import cn.samblog.lib.easymvp.utils.ClassUtil;
 import cn.samblog.lib.easymvp.utils.EasyHelper;
-import rx.Observable;
-import rx.functions.Action1;
-import rx.observers.Observers;
 import sample.easymvp.lib.samblog.cn.easymvplib.R;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * Activity快速开发基类
@@ -168,26 +148,7 @@ public abstract class BaseActivity extends AppCompatActivity implements  NotifyA
         overridePendingTransition(R.anim.enter_from_left_to_right, R.anim.exit_right);
     }
 
-    protected void toastWithSnackbar(View view, String message)
-    {
-        toastWithSnackbar(view, message, "好的，我知道了", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
-    }
-
-    protected void toastWithSnackbar(View view, String message, String action, View.OnClickListener onClickListener)
-    {
-        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction(action, onClickListener).show();
-    }
-
-
-    protected void toast(String message)
-    {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-    }
 
 
     public void startActivityFromLeftToRight(Class<? extends Activity> activityClass)
