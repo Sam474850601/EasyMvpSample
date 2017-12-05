@@ -16,6 +16,7 @@ import cn.samblog.lib.easymvp.annotation.OnClicked;
 import cn.samblog.lib.easymvp.annotation.Presenter;
 import cn.samblog.lib.easymvp.annotation.Resource;
 import cn.samblog.lib.easymvp.ui.activity.BaseActivity;
+import cn.samblog.lib.easymvp.utils.EasyHelper;
 
 /**
  * 欢迎界面
@@ -62,5 +63,12 @@ public class WelcomeActivity extends BaseActivity  implements IWelcomeView {
     public void forwordUserView() {
         startActivityFromRightToLeft(UserActivity.class);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        EasyHelper.clear();
+        EasyHelper.release();
+        super.onBackPressed();
     }
 }

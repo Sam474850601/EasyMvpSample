@@ -17,6 +17,7 @@ import cn.samblog.lib.easymvp.annotation.OnClicked;
 import cn.samblog.lib.easymvp.annotation.Presenter;
 import cn.samblog.lib.easymvp.annotation.Resource;
 import cn.samblog.lib.easymvp.ui.activity.BaseActivity;
+import cn.samblog.lib.easymvp.utils.EasyHelper;
 
 /**
  * 测试用户登录和用户注册mvp组件用例 ,
@@ -76,5 +77,12 @@ public class UserActivity extends BaseActivity implements IUserView{
         return  etRegisterUserName.getText().toString();
     }
 
+
+    @Override
+    public void onBackPressed() {
+        EasyHelper.clear();
+        EasyHelper.release();
+        super.onBackPressed();
+    }
 
 }
