@@ -764,11 +764,11 @@ public class DataDao
 
 ```
 
-# 释放单例管理引用
+# 释放管理资源引用
 
 ```java
-  
-  EasyHelper.release()
+
+  EasyHelper.release()
 
 ```
 
