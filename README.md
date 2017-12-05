@@ -55,7 +55,7 @@
 <dependency>
   <groupId>com.yoyonewbie.android.lib</groupId>
   <artifactId>easymvp</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <type>aar</type>
 </dependency>
 
