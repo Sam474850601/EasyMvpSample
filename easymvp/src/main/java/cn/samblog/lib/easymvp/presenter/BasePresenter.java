@@ -34,6 +34,7 @@ public  abstract  class BasePresenter<T extends IView> implements IPresenter<T> 
     @Override
     public void onResume() {
 
+
     }
 
     @Override

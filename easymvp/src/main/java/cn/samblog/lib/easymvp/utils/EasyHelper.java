@@ -43,10 +43,7 @@ import java.util.Map;
 
 public final  class EasyHelper {
 
-    private  final static  Manager manager = new Manager();
-
-
-
+    private  volatile static  Manager manager;
 
     /**
      * 用户缓存单例注入
@@ -56,6 +53,52 @@ public final  class EasyHelper {
 
         final Map<String, ContextModel> models =new HashMap<>();
         final Map<String, Object> others =new HashMap<String, Object>();
+    }
+
+
+    /**
+     * clear all single instance
+     */
+    public  static void  clear()
+    {
+        if(null != manager)
+        {
+            synchronized (Manager.class)
+            {
+                if(null != manager)
+                {
+                    manager.others.clear();
+                    manager.models.clear();
+                }
+            }
+        }
+    }
+
+    private static Manager getManager()
+    {
+        if(null == manager)
+        {
+            synchronized (Manager.class)
+            {
+                if(null == manager)
+                {
+                    manager = new  Manager();
+                }
+            }
+        }
+        return manager;
+    }
+
+
+    /**
+     * release manager instance
+     */
+    public static void release()
+    {
+        if(null != manager)
+        {
+            manager  = null;
+        }
     }
 
 
@@ -225,23 +268,23 @@ public final  class EasyHelper {
 
     public static  <T>  T getSingleModel(Class<? extends T> classType  )
     {
-        return (T)manager.models.get(getSingleKey(classType));
+        return (T)getManager().models.get(getSingleKey(classType));
     }
 
     public static void addModel(ContextModel contextModel)
     {
-        manager.models.put(getSingleKey(contextModel.getClass()), contextModel);
+        getManager().models.put(getSingleKey(contextModel.getClass()), contextModel);
     }
 
 
     public static  <T>  T getSingleObject(Class<? extends T> classType  )
     {
-        return (T)manager.others.get(getSingleKey(classType));
+        return (T)getManager().others.get(getSingleKey(classType));
     }
 
     private static void addObject(Object object)
     {
-        manager.others.put(getSingleKey(object.getClass()), object);
+        getManager().others.put(getSingleKey(object.getClass()), object);
     }
 
 
