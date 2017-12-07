@@ -55,7 +55,7 @@
 <dependency>
   <groupId>com.yoyonewbie.android.lib</groupId>
   <artifactId>easymvp</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <type>aar</type>
 </dependency>
 
@@ -66,7 +66,7 @@
 
 ```gradle
 
- compile 'com.yoyonewbie.android.lib:easymvp:1.0.1'
+ compile 'com.yoyonewbie.android.lib:easymvp:1.0.2'
 
 ```
 # 第一部分，简单使用演示
@@ -755,6 +755,25 @@ public class DataDao
 
 
 ```
+
+#  清除所有单例注解引用
+
+```java
+
+   EasyHelper.clear()
+
+```
+
+# 释放管理资源引用
+
+```java
+
+  EasyHelper.release()
+
+```
+
+
+
 
 # 具体详细使用，看源码演示代码， 感谢你的阅读
 
