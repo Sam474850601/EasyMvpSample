@@ -95,7 +95,7 @@ public final  class EasyHelper {
      */
     public static void release()
     {
-        if(null != manager)
+        synchronized (Manager.class)
         {
             manager  = null;
         }
