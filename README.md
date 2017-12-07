@@ -55,7 +55,7 @@
 <dependency>
   <groupId>com.yoyonewbie.android.lib</groupId>
   <artifactId>easymvp</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <type>aar</type>
 </dependency>
 
@@ -66,7 +66,7 @@
 
 ```gradle
 
- compile 'com.yoyonewbie.android.lib:easymvp:1.0.2'
+ compile 'com.yoyonewbie.android.lib:easymvp:1.0.3'
 
 ```
 # 第一部分，简单使用演示
